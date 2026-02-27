@@ -5,12 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>STIROX | Développeur & Créateur RP</title>
     
-    <!-- Favicon / Logo -->
     <link rel="icon" type="image/png" href="https://i.imgur.com/DguYFX1.png" />
-    
-    <!-- Tailwind CDN (OK pour dev/test, mais pour la prod → installe Tailwind localement) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
@@ -18,96 +15,52 @@
         :root {
             --neon: #00ff9d;
             --neon-dark: #00cc7a;
-            --bg-deep: #0a0e14;
-            --glass: rgba(15, 25, 40, 0.68);
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--bg-deep);
+            background: #0a0e14;
             color: #e0f7fa;
             overflow-x: hidden;
         }
 
-        .title-font {
-            font-family: 'Orbitron', sans-serif;
-            letter-spacing: 2px;
-        }
+        .title-font { font-family: 'Orbitron', sans-serif; letter-spacing: 2px; }
 
-        .matrix {
-            position: fixed;
-            inset: 0;
-            z-index: -20;
-            opacity: 0.14;
-            pointer-events: none;
-        }
-
+        .matrix { position: fixed; inset: 0; z-index: -20; opacity: 0.14; pointer-events: none; }
         .scan {
-            position: fixed;
-            inset: 0;
+            position: fixed; inset: 0;
             background: linear-gradient(transparent 48%, rgba(0,255,157,0.06) 50%);
             background-size: 100% 5px;
             animation: scanline 10s linear infinite;
-            pointer-events: none;
-            z-index: -10;
-            opacity: 0.18;
+            pointer-events: none; z-index: -10; opacity: 0.18;
         }
-
-        @keyframes scanline {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
-        }
+        @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
 
         .neon-text {
-            text-shadow: 
-                0 0 5px var(--neon),
-                0 0 15px var(--neon),
-                0 0 30px var(--neon-dark),
-                0 0 60px rgba(0,255,157,0.4);
+            text-shadow: 0 0 5px var(--neon), 0 0 15px var(--neon), 0 0 30px var(--neon-dark), 0 0 60px rgba(0,255,157,0.4);
         }
 
         .glass-card {
-            background: var(--glass);
+            background: rgba(15, 25, 40, 0.68);
             backdrop-filter: blur(16px) saturate(180%);
             border: 1px solid rgba(0,255,157,0.22);
             border-radius: 1.5rem;
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+        .glass-card:hover { transform: translateY(-14px) scale(1.03); box-shadow: 0 30px 70px -15px rgba(0,255,157,0.35); border-color: rgba(0,255,157,0.55); }
 
-        .glass-card:hover {
-            transform: translateY(-14px) scale(1.03);
-            box-shadow: 0 30px 70px -15px rgba(0,255,157,0.35);
-            border-color: rgba(0,255,157,0.55);
+        .chat-window {
+            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        .float-anim {
-            animation: float 6s ease-in-out infinite;
+        .status-dot {
+            display: inline-block;
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
         }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .pulse-glow {
-            animation: pulse 4s infinite ease-in-out;
-        }
-
-        @keyframes pulse {
-            0%, 100% { text-shadow: 0 0 10px var(--neon); }
-            50% { text-shadow: 0 0 30px var(--neon), 0 0 60px var(--neon-dark); }
-        }
+        @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
     </style>
 </head>
 <body class="relative">
@@ -119,8 +72,8 @@
     <nav class="fixed top-0 inset-x-0 z-50 glass-card border-b border-emerald-900/30">
         <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
             <div class="flex items-center gap-4">
-                <img src="https://i.imgur.com/DguYFX1.png" alt="STIROX Logo" class="w-10 h-10 rounded-xl shadow-lg neon-glow">
-                <span class="text-3xl font-black title-font neon-text tracking-wider">STIROX</span>
+                <img src="https://i.imgur.com/DguYFX1.png" alt="Logo" class="w-10 h-10 rounded-xl">
+                <span class="text-3xl font-black title-font neon-text">STIROX</span>
             </div>
 
             <div class="hidden md:flex gap-10 text-lg font-medium">
@@ -131,7 +84,13 @@
                 <a href="#contact" class="hover:text-[var(--neon)] transition">Contact</a>
             </div>
 
-            <a href="https://discord.com/users/stiroxbereal" target="_blank" class="text-3xl hover:text-[var(--neon)] transition">
+            <!-- DISCORD STATUS LIVE -->
+            <div id="discord-status" class="hidden md:flex items-center gap-3 bg-black/40 px-5 py-2 rounded-2xl border border-emerald-900/50">
+                <div id="status-dot" class="status-dot bg-gray-500"></div>
+                <span id="status-text" class="text-sm font-mono">Chargement...</span>
+            </div>
+
+            <a href="https://discord.com/users/771440807919878164" target="_blank" class="text-3xl hover:text-[var(--neon)] transition">
                 <i class="fab fa-discord"></i>
             </a>
         </div>
@@ -142,33 +101,24 @@
         <div class="max-w-6xl mx-auto text-center space-y-10">
             <div class="inline-flex items-center gap-4 px-8 py-3 glass-card rounded-full">
                 <div class="w-4 h-4 rounded-full bg-[var(--neon)] animate-ping"></div>
-                <span class="font-mono text-[var(--neon)] tracking-widest">CRÉATEUR D'INTERFACES RP • DISPONIBLE</span>
+                <span class="font-mono text-[var(--neon)] tracking-widest">CRÉATEUR RP • DISPONIBLE</span>
             </div>
 
-            <h1 class="text-7xl md:text-9xl font-black title-font neon-text pulse-glow">
-                STIROX
-            </h1>
-
-            <p class="text-4xl md:text-6xl text-[var(--neon)] font-light float-anim">
-                19 ans • Infirmier & Codeur RP
-            </p>
+            <h1 class="text-7xl md:text-9xl font-black title-font neon-text">STIROX</h1>
+            <p class="text-4xl md:text-6xl text-[var(--neon)] font-light">19 ans • Infirmier & Codeur RP</p>
 
             <div class="flex flex-wrap justify-center gap-8 text-2xl md:text-3xl font-mono text-cyan-200/80">
-                <span>HTML</span> <span>CSS</span> <span>JS</span> <span>Python</span> <span>Lua</span>
+                <span>HTML</span><span>CSS</span><span>JS</span><span>Python</span><span>Lua</span>
             </div>
 
-            <p class="max-w-3xl mx-auto text-xl md:text-2xl text-cyan-100/90 leading-relaxed">
+            <p class="max-w-3xl mx-auto text-xl md:text-2xl text-cyan-100/90">
                 Étudiant infirmier • Ancien technicien informatique<br>
-                Spécialisé dans les interfaces immersives pour roleplay médical, militaire et coulisses RP.
+                Interfaces immersives pour roleplay médical, militaire et coulisses
             </p>
 
             <div class="flex flex-col sm:flex-row gap-6 justify-center pt-8">
-                <a href="#projets" class="px-12 py-6 bg-gradient-to-r from-[var(--neon)] to-[var(--neon-dark)] text-black font-bold text-xl rounded-2xl shadow-2xl hover:scale-105 transition transform">
-                    Explorer les projets
-                </a>
-                <a href="#contact" class="px-12 py-6 border-2 border-[var(--neon)] text-[var(--neon)] font-bold text-xl rounded-2xl hover:bg-[rgba(0,255,157,0.1)] transition">
-                    Me contacter
-                </a>
+                <a href="#projets" class="px-12 py-6 bg-gradient-to-r from-[var(--neon)] to-[var(--neon-dark)] text-black font-bold text-xl rounded-2xl hover:scale-105 transition">Voir mes projets</a>
+                <a href="#contact" class="px-12 py-6 border-2 border-[var(--neon)] text-[var(--neon)] font-bold text-xl rounded-2xl hover:bg-[rgba(0,255,157,0.1)] transition">Me contacter</a>
             </div>
         </div>
     </section>
@@ -176,133 +126,306 @@
     <!-- À PROPOS -->
     <section id="apropos" class="py-32">
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-            <div class="space-y-10 reveal">
-                <span class="inline-block px-7 py-3 glass-card rounded-full text-[var(--neon)] font-mono tracking-widest">
-                    IDENTITÉ NUMÉRIQUE
-                </span>
-
-                <h2 class="text-6xl md:text-7xl title-font font-black neon-text">
-                    STIROX
-                </h2>
-
+            <div class="space-y-10">
+                <span class="inline-block px-7 py-3 glass-card rounded-full text-[var(--neon)] font-mono tracking-widest">STIROX</span>
+                <h2 class="text-6xl md:text-7xl title-font font-black neon-text">19 ans • Passionné RP</h2>
                 <div class="text-xl text-cyan-100/90 space-y-6">
-                    <p>19 ans, étudiant en soins infirmiers.</p>
-                    <p>Ancienne formation de technicien informatique.</p>
-                    <p>Je crée des systèmes web et applications pour le roleplay : dossiers médicaux, dispatch, formations, robots pharma, coulisses immersives...</p>
+                    <p>Étudiant en soins infirmiers + formation technicien informatique.</p>
+                    <p>Je développe tout ce qui rend le roleplay plus immersif : sites médicaux, dispatch, robots pharma, formations, coulisses tournantes…</p>
                 </div>
             </div>
-
-            <div class="relative reveal">
-                <div class="absolute inset-0 bg-gradient-radial from-[var(--neon-dark)]/20 to-transparent rounded-3xl"></div>
-                <img src="https://images.unsplash.com/photo-1555066931-bf19c0fd1085?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                     class="rounded-3xl shadow-2xl border border-[var(--neon)]/30 object-cover" alt="Cyber code">
+            <div class="relative">
+                <img src="https://images.unsplash.com/photo-1555066931-bf19c0fd1085?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="rounded-3xl shadow-2xl border border-[var(--neon)]/30" alt="Cyber">
             </div>
         </div>
     </section>
 
-    <!-- Les autres sections (compétences, projets, contact) restent identiques à la version précédente -->
+    <!-- COMPÉTENCES -->
+    <section id="competences" class="py-32 bg-black/30">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <h2 class="text-6xl md:text-7xl title-font font-black neon-text mb-16">Mes technologies</h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+                <div class="glass-card p-10"><i class="fab fa-html5 text-7xl text-orange-500"></i><h3 class="mt-4 text-2xl">HTML5</h3></div>
+                <div class="glass-card p-10"><i class="fab fa-css3-alt text-7xl text-blue-500"></i><h3 class="mt-4 text-2xl">CSS / Tailwind</h3></div>
+                <div class="glass-card p-10"><i class="fab fa-js text-7xl text-yellow-400"></i><h3 class="mt-4 text-2xl">JavaScript</h3></div>
+                <div class="glass-card p-10"><i class="fab fa-python text-7xl text-blue-600"></i><h3 class="mt-4 text-2xl">Python</h3></div>
+                <div class="glass-card p-10"><div class="text-7xl font-black text-purple-400">LUA</div><h3 class="mt-4 text-2xl">Lua</h3></div>
+            </div>
+        </div>
+    </section>
 
-    <!-- CONTACT (exemple simplifié pour ne pas allonger trop) -->
+    <!-- PROJETS (TOUS restaurés + Coulisses) -->
+    <section id="projets" class="py-32">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-6xl md:text-8xl title-font font-black neon-text text-center mb-24">Mes Projets RP</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- Coulisses spécial -->
+                <div class="glass-card overflow-hidden col-span-1 lg:col-span-2">
+                    <div class="h-80 bg-gradient-to-br from-purple-950 to-black flex items-center justify-center relative overflow-hidden">
+                        <i class="fas fa-theater-masks text-9xl text-purple-400/30 absolute animate-spin-slow"></i>
+                        <div class="text-center z-10">
+                            <h3 class="text-4xl font-black title-font neon-text">Système de Coulisses</h3>
+                            <p class="text-xl text-purple-300">Manège 360° immersif – décors & personnages tournent comme un vrai manège cyberpunk</p>
+                        </div>
+                    </div>
+                    <div class="p-8 text-sm text-cyan-300">Tu m’envoies tes images/vidéos → je l’intègre en vrai carousel 3D fluide.</div>
+                </div>
+
+                <div class="glass-card p-8">
+                    <i class="fas fa-building-shield text-6xl text-emerald-500 mb-6"></i>
+                    <h3 class="text-2xl font-bold">Site Web la Défense</h3>
+                    <p class="text-cyan-200/80 mt-3">Portail institutionnel / militaire RP</p>
+                </div>
+
+                <div class="glass-card p-8">
+                    <i class="fas fa-file-medical text-6xl text-blue-500 mb-6"></i>
+                    <h3 class="text-2xl font-bold">Encodage Patient Web + App</h3>
+                    <p class="text-cyan-200/80 mt-3">Formulaire web + application desktop</p>
+                </div>
+
+                <div class="glass-card p-8">
+                    <i class="fas fa-user-nurse text-6xl text-red-500 mb-6"></i>
+                    <h3 class="text-2xl font-bold">Formation Infirmier Militaire</h3>
+                    <p class="text-cyan-200/80 mt-3">Plateforme de formation immersive</p>
+                </div>
+
+                <div class="glass-card p-8">
+                    <i class="fas fa-robot text-6xl text-amber-500 mb-6"></i>
+                    <h3 class="text-2xl font-bold">Robot Pharmaceutique</h3>
+                    <p class="text-cyan-200/80 mt-3">Gestion automatisée stocks & délivrance</p>
+                </div>
+
+                <div class="glass-card p-8">
+                    <i class="fas fa-clipboard-list text-6xl text-cyan-500 mb-6"></i>
+                    <h3 class="text-2xl font-bold">Site de Dispatch</h3>
+                    <p class="text-cyan-200/80 mt-3">Dispatch médical RP en temps réel</p>
+                </div>
+
+                <div class="glass-card p-8">
+                    <i class="fas fa-folder-medical text-6xl text-pink-500 mb-6"></i>
+                    <h3 class="text-2xl font-bold">Dossiers Médicaux</h3>
+                    <p class="text-cyan-200/80 mt-3">Gestion centralisée des dossiers patients</p>
+                </div>
+
+                <div class="glass-card p-8">
+                    <i class="fas fa-heartbeat text-6xl text-red-500 mb-6"></i>
+                    <h3 class="text-2xl font-bold">Formation ECG + Suture</h3>
+                    <p class="text-cyan-200/80 mt-3">Modules interactifs spécialisés</p>
+                </div>
+
+                <div class="glass-card p-8">
+                    <i class="fas fa-brain text-6xl text-purple-500 mb-6"></i>
+                    <h3 class="text-2xl font-bold">Test Psychologique Militaire</h3>
+                    <p class="text-cyan-200/80 mt-3">Évaluation immersive recrutement RP</p>
+                </div>
+
+                <div class="glass-card p-8">
+                    <i class="fas fa-hospital text-6xl text-emerald-500 mb-6"></i>
+                    <h3 class="text-2xl font-bold">Site Web Médical Général</h3>
+                    <p class="text-cyan-200/80 mt-3">Hub médical complet pour RP</p>
+                </div>
+
+                <div class="glass-card p-8">
+                    <i class="fas fa-graduation-cap text-6xl text-yellow-500 mb-6"></i>
+                    <h3 class="text-2xl font-bold">Site de Formation Militaire</h3>
+                    <p class="text-cyan-200/80 mt-3">Formation globale pour unités RP</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT FORM -->
     <section id="contact" class="py-32 bg-black/40">
-        <div class="max-w-5xl mx-auto px-6 text-center">
-            <h2 class="text-7xl title-font font-black neon-text mb-16 pulse-glow">
-                Contact
-            </h2>
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-6xl md:text-7xl title-font font-black neon-text text-center mb-12">Me contacter</h2>
+            
+            <form action="https://formsubmit.co/stiroxtwitch@gmail.com" method="POST" class="glass-card p-10 space-y-8" enctype="multipart/form-data">
+                <input type="hidden" name="_subject" value="Nouveau message depuis le portfolio STIROX !">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_next" value="#contact">
 
-            <div class="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-                <div class="glass-card p-12 reveal">
-                    <i class="fab fa-discord text-8xl text-[var(--neon)] mb-8"></i>
-                    <h3 class="text-3xl font-bold mb-4">@stiroxbereal</h3>
-                    <a href="https://discord.gg/KhY2eTbWUV" target="_blank" 
-                       class="inline-block mt-6 px-10 py-5 bg-gradient-to-r from-[var(--neon)]/20 to-transparent border border-[var(--neon)]/50 rounded-2xl hover:bg-[var(--neon)]/10 transition">
-                        Rejoindre le serveur
-                    </a>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm mb-2 text-cyan-300">Ton email</label>
+                        <input type="email" name="email" required class="w-full bg-black/40 border border-emerald-900 rounded-2xl px-6 py-5 focus:border-[var(--neon)] outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-2 text-cyan-300">Objet</label>
+                        <input type="text" name="_subject" value="Nouveau projet RP" class="w-full bg-black/40 border border-emerald-900 rounded-2xl px-6 py-5 focus:border-[var(--neon)] outline-none">
+                    </div>
                 </div>
 
-                <div class="glass-card p-12 reveal">
-                    <i class="fas fa-envelope text-8xl text-[var(--neon)] mb-8"></i>
-                    <h3 class="text-3xl font-bold mb-4 break-all">stiroxtwitch@gmail.com</h3>
-                    <a href="mailto:stiroxtwitch@gmail.com" 
-                       class="inline-block mt-6 px-10 py-5 bg-gradient-to-r from-[var(--neon)]/20 to-transparent border border-[var(--neon)]/50 rounded-2xl hover:bg-[var(--neon)]/10 transition">
-                        Envoyer un mail
-                    </a>
+                <div>
+                    <label class="block text-sm mb-2 text-cyan-300">Ton message</label>
+                    <textarea name="message" rows="6" required class="w-full bg-black/40 border border-emerald-900 rounded-3xl px-6 py-5 focus:border-[var(--neon)] outline-none"></textarea>
                 </div>
-            </div>
+
+                <div>
+                    <label class="block text-sm mb-2 text-cyan-300">Joindre un fichier (image, PDF…)</label>
+                    <input type="file" name="attachment" class="w-full bg-black/40 border border-emerald-900 rounded-2xl px-6 py-5 text-sm">
+                </div>
+
+                <button type="submit" class="w-full py-7 bg-gradient-to-r from-[var(--neon)] to-[var(--neon-dark)] text-black font-bold text-xl rounded-3xl hover:scale-105 transition">
+                    Envoyer le message
+                </button>
+            </form>
         </div>
     </section>
 
-    <footer class="py-16 text-center text-cyan-200/50 border-t border-cyan-900/30">
+    <!-- FLOATING CHATBOT BUTTON -->
+    <button onclick="toggleChat()" class="fixed bottom-8 right-8 w-16 h-16 bg-[#5865F2] hover:bg-[#4752C4] rounded-2xl flex items-center justify-center shadow-2xl text-3xl z-50 transition">
+        <i class="fab fa-discord"></i>
+    </button>
+
+    <!-- CHATBOT WINDOW -->
+    <div id="chat-modal" class="hidden fixed bottom-28 right-8 w-96 bg-zinc-950 border border-[var(--neon)]/50 rounded-3xl shadow-2xl overflow-hidden chat-window">
+        <div class="bg-black/80 p-4 flex items-center gap-3 border-b border-[var(--neon)]/30">
+            <div class="w-10 h-10 bg-emerald-500 rounded-2xl flex items-center justify-center text-xl">🤖</div>
+            <div>
+                <div class="font-bold text-lg">STIROX ASSISTANT</div>
+                <div class="text-xs text-emerald-400">En ligne • IA RP</div>
+            </div>
+            <button onclick="toggleChat()" class="ml-auto text-2xl text-gray-400 hover:text-white">✕</button>
+        </div>
+        
+        <div id="chat-messages" class="h-96 overflow-y-auto p-5 space-y-4 text-sm bg-black/40">
+            <div class="bg-zinc-900 rounded-2xl p-4">Salut ! Je suis STIROX ASSISTANT.<br>Demande-moi n’importe quoi : âge, projets, compétences, Discord, etc.</div>
+        </div>
+        
+        <div class="p-4 border-t border-zinc-800">
+            <div class="flex gap-3">
+                <input id="chat-input" type="text" placeholder="Pose-moi une question..." 
+                       class="flex-1 bg-zinc-900 border border-zinc-700 rounded-2xl px-6 py-4 outline-none focus:border-[var(--neon)]"
+                       onkeypress="if(event.key==='Enter') sendMessage()">
+                <button onclick="sendMessage()" class="w-14 h-14 bg-[var(--neon)] text-black rounded-2xl flex items-center justify-center text-2xl hover:scale-110 transition">
+                    ↑
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="py-12 text-center text-cyan-200/40 border-t border-cyan-900/30">
         <p>© 2026 STIROX — Tous droits réservés</p>
     </footer>
 
     <script>
-        // ────────────────────────────────────────────────
-        // Matrix rain – lancé SEULEMENT après chargement complet
-        // ────────────────────────────────────────────────
+        // ==================== MATRIX ====================
         function initMatrix() {
             const canvas = document.getElementById('matrix');
-            if (!canvas) {
-                console.warn("Canvas #matrix introuvable");
-                return;
-            }
-
             const ctx = canvas.getContext('2d');
-            if (!ctx) {
-                console.error("Impossible d'obtenir le contexte 2D du canvas");
-                return;
-            }
+            function resize() { canvas.height = window.innerHeight; canvas.width = window.innerWidth; }
+            resize(); window.addEventListener('resize', resize);
 
-            function resize() {
-                canvas.height = window.innerHeight;
-                canvas.width = window.innerWidth;
-            }
-            resize();
-            window.addEventListener('resize', resize);
-
-            const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}".split("");
+            const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワンABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%^&*".split("");
             const fontSize = 14;
             let columns = canvas.width / fontSize;
             let drops = new Array(Math.floor(columns)).fill(1);
 
             function draw() {
-                ctx.fillStyle = "rgba(10,14,20,0.04)";
+                ctx.fillStyle = "rgba(10,14,20,0.05)";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-
                 ctx.fillStyle = "#00ff9d";
                 ctx.font = fontSize + "px monospace";
-
                 for (let i = 0; i < drops.length; i++) {
                     const text = chars[Math.floor(Math.random() * chars.length)];
                     ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
                     drops[i]++;
                 }
             }
-
-            setInterval(draw, 50);
+            setInterval(draw, 45);
         }
 
-        // Lancement après chargement complet de la page
+        // ==================== DISCORD LIVE STATUS ====================
+        async function updateDiscordStatus() {
+            try {
+                const res = await fetch('https://api.lanyard.rest/v1/users/771440807919878164');
+                const json = await res.json();
+                if (!json.success) throw new Error();
+
+                const status = json.data.discord_status;
+                const dot = document.getElementById('status-dot');
+                const text = document.getElementById('status-text');
+
+                document.getElementById('discord-status').classList.remove('hidden');
+
+                if (status === 'online') {
+                    dot.className = 'status-dot bg-emerald-400';
+                    text.textContent = 'En ligne';
+                    text.style.color = '#22ff88';
+                } else if (status === 'idle') {
+                    dot.className = 'status-dot bg-yellow-400';
+                    text.textContent = 'Inactif';
+                    text.style.color = '#fbbf24';
+                } else if (status === 'dnd') {
+                    dot.className = 'status-dot bg-red-500';
+                    text.textContent = 'Ne pas déranger';
+                    text.style.color = '#ef4444';
+                } else {
+                    dot.className = 'status-dot bg-gray-500';
+                    text.textContent = 'Hors ligne';
+                    text.style.color = '#9ca3af';
+                }
+            } catch(e) {
+                // Si Lanyard non activé ou erreur → affichage par défaut
+                document.getElementById('discord-status').classList.remove('hidden');
+                document.getElementById('status-dot').className = 'status-dot bg-gray-500';
+                document.getElementById('status-text').textContent = 'Discord';
+            }
+        }
+
+        // ==================== CHATBOT ====================
+        const responses = {
+            "bonjour": "Salut ! Prêt à discuter RP ou dev ? 😎",
+            "salut": "Yo ! Comment va le roleplay aujourd’hui ?",
+            "qui es tu": "Je suis STIROX, 19 ans, étudiant infirmier et développeur spécialisé dans les interfaces RP médicales & militaires.",
+            "âge": "J’ai 19 ans !",
+            "projets": "J’ai fait : Site la Défense, Encodage Patient, Robot Pharmaceutique, Formation Infirmier Militaire, Coulisses tournantes, Dispatch, Dossiers Médicaux, ECG, Suture, Test Psy…",
+            "compétences": "HTML, CSS, JavaScript, Python, Lua. Tout en mode ultra-beau et immersif !",
+            "discord": "Ajoute-moi → @stiroxbereal ou rejoins mon serveur : https://discord.gg/KhY2eTbWUV",
+            "contact": "Le formulaire juste en dessous ou Discord !",
+            "coulisses": "Le manège 360° est en préparation ! Envoie-moi tes images/vidéos et je le monte en 3D.",
+            "default": "Hmmm… Essaie avec : projets, compétences, discord, âge, coulisses…"
+        };
+
+        function toggleChat() {
+            const modal = document.getElementById('chat-modal');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) {
+                setTimeout(() => document.getElementById('chat-input').focus(), 300);
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim().toLowerCase();
+            if (!msg) return;
+
+            const messages = document.getElementById('chat-messages');
+            messages.innerHTML += `<div class="text-right"><div class="inline-block bg-[var(--neon)] text-black px-5 py-3 rounded-3xl max-w-[75%]">${input.value}</div></div>`;
+            messages.scrollTop = messages.scrollHeight;
+
+            setTimeout(() => {
+                let reply = responses.default;
+                for (let key in responses) {
+                    if (msg.includes(key)) { reply = responses[key]; break; }
+                }
+                messages.innerHTML += `<div class="bg-zinc-900 rounded-3xl p-4 max-w-[80%]">${reply}</div>`;
+                messages.scrollTop = messages.scrollHeight;
+            }, 600);
+
+            input.value = '';
+        }
+
+        // ==================== INIT ====================
         window.addEventListener('load', () => {
             initMatrix();
-
-            // Scroll reveal (déjà présent avant)
-            const reveals = document.querySelectorAll('.reveal');
-            function checkReveal() {
-                reveals.forEach(el => {
-                    const windowHeight = window.innerHeight;
-                    const elementTop = el.getBoundingClientRect().top;
-                    if (elementTop < windowHeight - 150) {
-                        el.classList.add('active');
-                    }
-                });
-            }
-            window.addEventListener('scroll', checkReveal);
-            checkReveal(); // premier check
+            updateDiscordStatus();        // Mise à jour statut Discord
+            setInterval(updateDiscordStatus, 60000); // Rafraîchit toutes les minutes
         });
+
+        // Tailwind script déjà chargé via CDN
     </script>
 </body>
 </html>
