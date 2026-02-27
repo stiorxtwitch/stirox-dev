@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maxime Rivière | Développeur Web & Applications</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap');
+        
+        :root {
+            --neon-green: #22ff88;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        
+        .title-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .matrix-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.25;
+            mix-blend-mode: screen;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .neon-text {
+            text-shadow: 
+                0 0 10px var(--neon-green),
+                0 0 20px var(--neon-green),
+                0 0 40px var(--neon-green);
+        }
+
+        .glass {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(34, 255, 136, 0.2);
+        }
+
+        .skill-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .skill-card:hover {
+            transform: translateY(-12px) scale(1.05);
+            box-shadow: 0 0 40px -10px var(--neon-green);
+        }
+
+        .project-card {
+            transition: all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px -15px rgb(34 255 136 / 0.3);
+        }
+
+        .scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(34, 255, 136, 0.03) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            animation: scan 6s linear infinite;
+            z-index: 1;
+            opacity: 0.15;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .glitch {
+            position: relative;
+        }
+        
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch::before {
+            animation: glitch-anim 2s infinite linear alternate-reverse;
+            color: #22ff88;
+            left: 2px;
+            text-shadow: -2px 0 #ff00ff;
+            clip: rect(0, 900px, 0, 0);
+        }
+        
+        .glitch::after {
+            animation: glitch-anim2 3s infinite linear alternate-reverse;
+            color: #22ff88;
+            left: -2px;
+            text-shadow: 2px 0 #00ffff;
+            clip: rect(0, 900px, 0, 0);
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 40px, 0); }
+            5% { clip: rect(50px, 9999px, 80px, 0); }
+            10% { clip: rect(20px, 9999px, 60px, 0); }
+            15% { clip: rect(70px, 9999px, 90px, 0); }
+            20% { clip: rect(30px, 9999px, 50px, 0); }
+            25% { clip: rect(40px, 9999px, 70px, 0); }
+            30% { clip: rect(60px, 9999px, 85px, 0); }
+            35% { clip: rect(15px, 9999px, 55px, 0); }
+            100% { clip: rect(25px, 9999px, 65px, 0); }
+        }
+        
+        @keyframes glitch-anim2 {
+            0% { clip: rect(20px, 9999px, 70px, 0); }
+            5% { clip: rect(40px, 9999px, 90px, 0); }
+            10% { clip: rect(60px, 9999px, 40px, 0); }
+            15% { clip: rect(30px, 9999px, 80px, 0); }
+            20% { clip: rect(50px, 9999px, 60px, 0); }
+            25% { clip: rect(70px, 9999px, 30px, 0); }
+            30% { clip: rect(10px, 9999px, 50px, 0); }
+            100% { clip: rect(45px, 9999px, 75px, 0); }
+        }
+
+        .terminal {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            border: 2px solid #22ff88;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-200 overflow-x-hidden">
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass border-b border-emerald-500/20">
+        <div class="max-w-screen-2xl mx-auto px-8 py-5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center text-black font-bold text-xl title-font">MR</div>
+                <span class="text-2xl font-semibold title-font tracking-tighter">Maxime Rivière</span>
+            </div>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center gap-10 text-lg">
+                <a href="#accueil" class="hover:text-emerald-400 transition-colors duration-300 font-medium">Accueil</a>
+                <a href="#apropos" class="hover:text-emerald-400 transition-colors duration-300 font-medium">À propos</a>
+                <a href="#competences" class="hover:text-emerald-400 transition-colors duration-300 font-medium">Compétences</a>
+                <a href="#projets" class="hover:text-emerald-400 transition-colors duration-300 font-medium">Projets</a>
+                <a href="#contact" class="hover:text-emerald-400 transition-colors duration-300 font-medium">Contact</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="https://github.com" target="_blank" class="text-2xl hover:text-emerald-400 transition-colors"><i class="fab fa-github"></i></a>
+                <a href="https://linkedin.com" target="_blank" class="text-2xl hover:text-emerald-400 transition-colors"><i class="fab fa-linkedin"></i></a>
+                <button onclick="toggleMobileMenu()" class="md:hidden text-3xl">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden fixed inset-0 bg-zinc-950 z-50 pt-20">
+            <div class="flex flex-col items-center gap-8 text-3xl py-12">
+                <a href="#accueil" onclick="toggleMobileMenu()" class="hover:text-emerald-400">Accueil</a>
+                <a href="#apropos" onclick="toggleMobileMenu()" class="hover:text-emerald-400">À propos</a>
+                <a href="#competences" onclick="toggleMobileMenu()" class="hover:text-emerald-400">Compétences</a>
+                <a href="#projets" onclick="toggleMobileMenu()" class="hover:text-emerald-400">Projets</a>
+                <a href="#contact" onclick="toggleMobileMenu()" class="hover:text-emerald-400">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="accueil" class="min-h-screen relative flex items-center justify-center overflow-hidden">
+        <canvas id="matrix" class="matrix-canvas"></canvas>
+        <div class="scanline"></div>
+        
+        <div class="hero-content max-w-screen-2xl mx-auto px-8 pt-20 text-center">
+            <div class="max-w-4xl mx-auto">
+                <div class="inline-flex items-center gap-3 bg-zinc-900 border border-emerald-500/30 rounded-full px-6 py-2 mb-8">
+                    <div class="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
+                    <span class="text-emerald-400 font-mono text-sm tracking-widest">DISPONIBLE POUR FREELANCE</span>
+                </div>
+                
+                <h1 data-text="MAXIME RIVIÈRE" class="glitch title-font text-7xl md:text-8xl font-bold tracking-tighter neon-text mb-4">
+                    MAXIME RIVIÈRE
+                </h1>
+                
+                <p class="text-3xl md:text-5xl text-emerald-400 font-light mb-6">Jeune développeur • 22 ans</p>
+                
+                <div class="flex flex-wrap justify-center gap-x-8 gap-y-2 text-xl md:text-2xl font-mono text-zinc-400 mb-10">
+                    <span class="hover:text-white transition-colors">HTML</span>
+                    <span class="hover:text-white transition-colors">CSS</span>
+                    <span class="hover:text-white transition-colors">JAVASCRIPT</span>
+                    <span class="hover:text-white transition-colors">PYTHON</span>
+                    <span class="hover:text-white transition-colors">LUA</span>
+                </div>
+                
+                <p class="max-w-xl mx-auto text-xl text-zinc-400 leading-relaxed mb-12">
+                    Passionné par le code depuis mes 15 ans.<br>
+                    Je crée des sites web époustouflants et des applications performantes.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-5 justify-center">
+                    <a href="#projets" 
+                       class="group px-10 py-6 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xl rounded-2xl flex items-center justify-center gap-3 transition-all duration-300 hover:scale-105">
+                        <span>Découvrir mes projets</span>
+                        <i class="fas fa-arrow-right group-active:rotate-45 transition-transform"></i>
+                    </a>
+                    
+                    <a href="#contact" 
+                       class="px-10 py-6 border-2 border-emerald-400 hover:bg-emerald-400/10 font-semibold text-xl rounded-2xl flex items-center justify-center gap-3 transition-all duration-300">
+                        Me contacter
+                    </a>
+                </div>
+                
+                <div class="mt-20 flex justify-center gap-12 text-zinc-500">
+                    <div class="text-center">
+                        <div class="text-4xl font-mono text-emerald-400">15+</div>
+                        <div class="text-sm tracking-widest">PROJETS</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-mono text-emerald-400">∞</div>
+                        <div class="text-sm tracking-widest">CAFÉS CODE</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-mono text-emerald-400">4</div>
+                        <div class="text-sm tracking-widest">LANGAGES</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-emerald-400/60">
+            <div class="text-xs tracking-[4px] font-mono">SCROLL</div>
+            <div class="w-px h-12 bg-gradient-to-b from-transparent via-emerald-400 to-transparent"></div>
+        </div>
+    </section>
+
+    <!-- À PROPOS -->
+    <section id="apropos" class="py-28 bg-zinc-900">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="grid md:grid-cols-2 gap-20 items-center">
+                <!-- Photo -->
+                <div class="relative">
+                    <div class="absolute -inset-4 border border-emerald-400/30 rounded-3xl rotate-3"></div>
+                    <img src="https://picsum.photos/id/64/800/1000" 
+                         alt="Maxime Rivière" 
+                         class="relative w-full rounded-3xl shadow-2xl border border-emerald-400/30 object-cover">
+                    <div class="absolute -bottom-6 -right-6 bg-zinc-900 border border-emerald-400 px-8 py-4 rounded-2xl shadow-xl">
+                        <div class="flex items-center gap-4">
+                            <div class="text-emerald-400 text-5xl">🇫🇷</div>
+                            <div>
+                                <div class="font-semibold">Paris, France</div>
+                                <div class="text-sm text-zinc-400">Disponible partout</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Texte -->
+                <div class="space-y-8">
+                    <div class="inline-block px-6 py-2 bg-emerald-400/10 border border-emerald-400 rounded-full text-emerald-400 text-sm tracking-widest font-mono">
+                        QUI SUIS-JE ?
+                    </div>
+                    
+                    <h2 class="text-6xl title-font font-semibold leading-none tracking-tighter">
+                        Un jeune codeur<br>qui transforme<br>les idées en pixels.
+                    </h2>
+                    
+                    <div class="prose prose-invert max-w-none text-lg text-zinc-300 leading-relaxed">
+                        <p class="text-xl">
+                            Salut ! Je suis <span class="text-emerald-400 font-semibold">Maxime Rivière</span>, 22 ans, passionné de développement depuis mes premiers "Hello World".
+                        </p>
+                        <p>
+                            Je suis avant tout un <strong>web développeur</strong> : je conçois des interfaces modernes, fluides et ultra-rapides avec HTML, CSS et JavaScript (et Tailwind quand je veux aller très vite).
+                        </p>
+                        <p>
+                            Mais je ne m'arrête pas là : je développe aussi des <strong>applications desktop et scripts</strong> en Python, et j'adore créer des petits jeux et outils en <strong>Lua</strong>.
+                        </p>
+                        <p class="italic text-emerald-400">
+                            "Le code n'est pas seulement mon métier, c'est ma façon de raconter des histoires."
+                        </p>
+                    </div>
+                    
+                    <div class="flex gap-6 pt-6">
+                        <div class="terminal px-7 py-4 rounded-2xl text-sm">
+                            <div class="flex gap-2 text-emerald-400 mb-2">
+                                <span>❯</span>
+                                <span class="text-zinc-400">age</span>
+                            </div>
+                            <div class="text-3xl font-mono">22</div>
+                        </div>
+                        <div class="terminal px-7 py-4 rounded-2xl text-sm">
+                            <div class="flex gap-2 text-emerald-400 mb-2">
+                                <span>❯</span>
+                                <span class="text-zinc-400">coffee/day</span>
+                            </div>
+                            <div class="text-3xl font-mono">4.2</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPÉTENCES -->
+    <section id="competences" class="py-28">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="text-center mb-16">
+                <span class="px-5 py-2 bg-zinc-900 rounded-full text-emerald-400 text-sm font-mono tracking-widest">STACK TECHNIQUE</span>
+                <h2 class="text-6xl title-font font-bold mt-6">Mes armes de prédilection</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+                <!-- HTML -->
+                <div class="skill-card bg-zinc-900 border border-zinc-800 hover:border-emerald-400/50 rounded-3xl p-8 text-center">
+                    <i class="fa-brands fa-html5 text-7xl text-orange-500 mb-6"></i>
+                    <h3 class="text-2xl font-semibold mb-1">HTML5</h3>
+                    <p class="text-emerald-400 text-sm font-mono">Structure • Sémantique • Accessibilité</p>
+                    <div class="h-1.5 bg-zinc-800 rounded-full mt-8 overflow-hidden">
+                        <div class="h-full w-[95%] bg-orange-500"></div>
+                    </div>
+                </div>
+                
+                <!-- CSS -->
+                <div class="skill-card bg-zinc-900 border border-zinc-800 hover:border-emerald-400/50 rounded-3xl p-8 text-center">
+                    <i class="fa-brands fa-css3-alt text-7xl text-blue-500 mb-6"></i>
+                    <h3 class="text-2xl font-semibold mb-1">CSS3 / Tailwind</h3>
+                    <p class="text-emerald-400 text-sm font-mono">Animations • Responsive • Design avancé</p>
+                    <div class="h-1.5 bg-zinc-800 rounded-full mt-8 overflow-hidden">
+                        <div class="h-full w-[98%] bg-blue-500"></div>
+                    </div>
+                </div>
+                
+                <!-- JS -->
+                <div class="skill-card bg-zinc-900 border border-zinc-800 hover:border-emerald-400/50 rounded-3xl p-8 text-center">
+                    <i class="fa-brands fa-js text-7xl text-yellow-400 mb-6"></i>
+                    <h3 class="text-2xl font-semibold mb-1">JavaScript</h3>
+                    <p class="text-emerald-400 text-sm font-mono">React • Vanilla • Three.js</p>
+                    <div class="h-1.5 bg-zinc-800 rounded-full mt-8 overflow-hidden">
+                        <div class="h-full w-[90%] bg-yellow-400"></div>
+                    </div>
+                </div>
+                
+                <!-- Python -->
+                <div class="skill-card bg-zinc-900 border border-zinc-800 hover:border-emerald-400/50 rounded-3xl p-8 text-center">
+                    <i class="fa-brands fa-python text-7xl text-blue-600 mb-6"></i>
+                    <h3 class="text-2xl font-semibold mb-1">Python</h3>
+                    <p class="text-emerald-400 text-sm font-mono">Flask • Django • Automatisation • Data</p>
+                    <div class="h-1.5 bg-zinc-800 rounded-full mt-8 overflow-hidden">
+                        <div class="h-full w-[85%] bg-blue-600"></div>
+                    </div>
+                </div>
+                
+                <!-- Lua -->
+                <div class="skill-card bg-zinc-900 border border-zinc-800 hover:border-emerald-400/50 rounded-3xl p-8 text-center">
+                    <div class="text-7xl font-bold text-purple-400 mb-6 tracking-tighter">LUA</div>
+                    <h3 class="text-2xl font-semibold mb-1">Lua</h3>
+                    <p class="text-emerald-400 text-sm font-mono">Love2D • Scripts • Roblox • Optimisation</p>
+                    <div class="h-1.5 bg-zinc-800 rounded-full mt-8 overflow-hidden">
+                        <div class="h-full w-[80%] bg-purple-400"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-16 text-zinc-400 text-sm font-mono">
+                Et bien d'autres outils : Git • Figma • VS Code • Linux • Docker ...
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJETS -->
+    <section id="projets" class="py-28 bg-zinc-900">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <span class="font-mono text-emerald-400">03 // PROJETS RÉCENTS</span>
+                    <h2 class="text-6xl title-font font-bold">Ce que j'ai construit</h2>
+                </div>
+                <a href="#" class="hidden md:flex items-center gap-3 group text-emerald-400 hover:text-white">
+                    <span class="font-medium">Voir tous les projets</span>
+                    <div class="w-10 h-px bg-current group-hover:w-16 transition-all"></div>
+                </a>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Projet 1 -->
+                <div class="project-card group bg-zinc-950 border border-zinc-800 rounded-3xl overflow-hidden">
+                    <div class="h-80 bg-zinc-800 relative">
+                        <img src="https://picsum.photos/id/201/800/600" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Projet 1">
+                        <div class="absolute top-4 right-4 px-4 py-2 bg-black/70 text-xs font-mono rounded-full">2025</div>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex gap-3 mb-4">
+                            <span class="text-xs px-3 py-1 bg-emerald-400/10 text-emerald-400 rounded-full">Web</span>
+                            <span class="text-xs px-3 py-1 bg-purple-400/10 text-purple-400 rounded-full">Tailwind</span>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-3">Nova Dashboard</h3>
+                        <p class="text-zinc-400 line-clamp-3">Interface d'administration ultra-moderne avec animations fluides et dark mode parfait.</p>
+                        <div class="mt-8 flex justify-between items-center">
+                            <span class="text-emerald-400 text-sm font-mono">LIVE →</span>
+                            <button onclick="window.open('https://github.com', '_blank')" class="text-2xl text-zinc-400 hover:text-white"><i class="fab fa-github"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Projet 2 -->
+                <div class="project-card group bg-zinc-950 border border-zinc-800 rounded-3xl overflow-hidden">
+                    <div class="h-80 bg-zinc-800 relative">
+                        <img src="https://picsum.photos/id/251/800/600" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Projet 2">
+                        <div class="absolute top-4 right-4 px-4 py-2 bg-black/70 text-xs font-mono rounded-full">2024</div>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex gap-3 mb-4">
+                            <span class="text-xs px-3 py-1 bg-blue-400/10 text-blue-400 rounded-full">Python</span>
+                            <span class="text-xs px-3 py-1 bg-amber-400/10 text-amber-400 rounded-full">App</span>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-3">TaskForge</h3>
+                        <p class="text-zinc-400 line-clamp-3">Application desktop de gestion de tâches avec synchronisation temps réel et IA de priorisation.</p>
+                        <div class="mt-8 flex justify-between items-center">
+                            <span class="text-emerald-400 text-sm font-mono">GITHUB →</span>
+                            <button onclick="window.open('https://github.com', '_blank')" class="text-2xl text-zinc-400 hover:text-white"><i class="fab fa-github"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Projet 3 -->
+                <div class="project-card group bg-zinc-950 border border-zinc-800 rounded-3xl overflow-hidden">
+                    <div class="h-80 bg-zinc-800 relative">
+                        <img src="https://picsum.photos/id/180/800/600" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Projet 3">
+                        <div class="absolute top-4 right-4 px-4 py-2 bg-black/70 text-xs font-mono rounded-full">2024</div>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex gap-3 mb-4">
+                            <span class="text-xs px-3 py-1 bg-purple-400/10 text-purple-400 rounded-full">Lua</span>
+                            <span class="text-xs px-3 py-1 bg-red-400/10 text-red-400 rounded-full">Jeu</span>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-3">Neon Runner</h3>
+                        <p class="text-zinc-400 line-clamp-3">Jeu de course 2D cyberpunk développé entièrement en Lua avec le framework Love2D.</p>
+                        <div class="mt-8 flex justify-between items-center">
+                            <span class="text-emerald-400 text-sm font-mono">ITCHO.IO →</span>
+                            <button onclick="window.open('https://github.com', '_blank')" class="text-2xl text-zinc-400 hover:text-white"><i class="fab fa-github"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="py-28">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="grid md:grid-cols-2 gap-20">
+                <div>
+                    <h2 class="text-6xl title-font font-bold leading-none mb-8">On discute de<br>ton prochain projet ?</h2>
+                    <p class="text-xl text-zinc-400 max-w-md">
+                        Que ce soit un site vitrine, une web app complète ou un petit jeu Lua, je suis prêt à coder avec toi.
+                    </p>
+                    
+                    <div class="mt-16 space-y-8">
+                        <div class="flex items-center gap-6">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-400/10 flex items-center justify-center text-3xl text-emerald-400">
+                                ✉️
+                            </div>
+                            <div>
+                                <div class="font-mono text-sm text-zinc-400">EMAIL</div>
+                                <a href="mailto:maxime.riviere.dev@gmail.com" class="text-2xl hover:text-emerald-400 transition-colors">maxime.riviere.dev@gmail.com</a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-6">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-400/10 flex items-center justify-center text-3xl text-emerald-400">
+                                <i class="fab fa-discord"></i>
+                            </div>
+                            <div>
+                                <div class="font-mono text-sm text-zinc-400">DISCORD</div>
+                                <span class="text-2xl">maxime.riviere</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Formulaire -->
+                <form id="contactForm" onsubmit="handleSubmit(event)" class="space-y-8">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-mono mb-2 text-zinc-400">Prénom</label>
+                            <input type="text" id="prenom" required
+                                   class="w-full bg-zinc-900 border border-zinc-700 focus:border-emerald-400 rounded-2xl px-6 py-5 outline-none transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-mono mb-2 text-zinc-400">Nom</label>
+                            <input type="text" id="nom" required
+                                   class="w-full bg-zinc-900 border border-zinc-700 focus:border-emerald-400 rounded-2xl px-6 py-5 outline-none transition-colors">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-mono mb-2 text-zinc-400">Email</label>
+                        <input type="email" id="email" required
+                               class="w-full bg-zinc-900 border border-zinc-700 focus:border-emerald-400 rounded-2xl px-6 py-5 outline-none transition-colors">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-mono mb-2 text-zinc-400">Message</label>
+                        <textarea id="message" rows="6" required
+                                  class="w-full bg-zinc-900 border border-zinc-700 focus:border-emerald-400 rounded-3xl px-6 py-5 outline-none transition-colors resize-none"></textarea>
+                    </div>
+                    
+                    <button type="submit"
+                            class="w-full py-7 bg-emerald-400 hover:bg-white text-black font-semibold text-xl rounded-3xl transition-all duration-300 flex items-center justify-center gap-3 group">
+                        <span>ENVOYER LE MESSAGE</span>
+                        <i class="fas fa-paper-plane group-active:translate-x-2 transition-transform"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-black py-12 border-t border-zinc-900">
+        <div class="max-w-screen-2xl mx-auto px-8 text-center text-zinc-500 text-sm">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div>© 2026 Maxime Rivière — Tous droits réservés</div>
+                <div class="flex gap-8">
+                    <a href="#" class="hover:text-emerald-400 transition-colors">Mentions légales</a>
+                    <a href="#" class="hover:text-emerald-400 transition-colors">Confidentialité</a>
+                </div>
+                <div class="flex gap-6 text-2xl">
+                    <a href="https://github.com" target="_blank" class="hover:text-emerald-400"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com" target="_blank" class="hover:text-emerald-400"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="hover:text-emerald-400"><i class="fab fa-x-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tailwind config
+        function initTailwind() {
+            // Already using CDN, custom colors via CSS variables
+        }
+
+        // Matrix rain
+        function createMatrixRain() {
+            const canvas = document.getElementById('matrix');
+            const ctx = canvas.getContext('2d');
+            
+            function resizeCanvas() {
+                canvas.height = window.innerHeight;
+                canvas.width = window.innerWidth;
+            }
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const fontSize = 16;
+            let columns = canvas.width / fontSize;
+            let drops = [];
+            
+            for (let x = 0; x < columns; x++) {
+                drops[x] = Math.floor(Math.random() * 80);
+            }
+            
+            function draw() {
+                ctx.fillStyle = 'rgba(10, 10, 10, 0.08)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#22ff88';
+                ctx.font = `${fontSize}px monospace`;
+                
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+            
+            setInterval(draw, 35);
+        }
+
+        // Mobile menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Form submit
+        function handleSubmit(e) {
+            e.preventDefault();
+            const form = document.getElementById('contactForm');
+            
+            // Fake sending
+            const btn = form.querySelector('button');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="animate-spin h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+            `;
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                alert("✅ Message envoyé avec succès !\n\nMerci beaucoup, je te réponds très vite. 🚀");
+                form.reset();
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 1800);
+        }
+
+        // Smooth scroll
+        function smoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    if (this.getAttribute('href') === '#') return;
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Keyboard shortcut Easter egg (Press "K" for konami-like fun)
+        let konamiCode = [];
+        const secret = ['k', 'o', 'd', 'e'];
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key.toLowerCase());
+            if (konamiCode.length > secret.length) konamiCode.shift();
+            if (JSON.stringify(konamiCode) === JSON.stringify(secret)) {
+                document.documentElement.style.setProperty('--neon-green', '#ff00ff');
+                setTimeout(() => {
+                    document.documentElement.style.setProperty('--neon-green', '#22ff88');
+                }, 3000);
+                alert("🎉 Mode cyberpunk activé !");
+                konamiCode = [];
+            }
+        });
+
+        // Init everything
+        window.onload = function() {
+            initTailwind();
+            createMatrixRain();
+            smoothScroll();
+            
+            // Fake live visitor count in console
+            console.log('%c👾 Portfolio de Maxime Rivière chargé avec succès !', 'color:#22ff88; font-family:monospace; font-size:14px');
+        };
+    </script>
+</body>
+</html>
