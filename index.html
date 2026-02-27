@@ -3,141 +3,173 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>STIROX | Développeur Web & Applications</title>
+    <title>STIROX | Développeur & Créateur RP</title>
+    
+    <!-- Favicon / Logo -->
+    <link rel="icon" type="image/png" href="https://i.imgur.com/DguYFX1.png" />
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
         :root {
-            --neon-green: #22ff88;
-        }
-        
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: #0a0a0a;
-            color: #e5e7eb;
-        }
-        
-        .title-font {
-            font-family: 'Space Grotesk', sans-serif;
+            --neon: #00ff9d;
+            --neon-dark: #00cc7a;
+            --bg-deep: #0a0e14;
+            --glass: rgba(15, 25, 40, 0.68);
         }
 
-        .matrix-canvas {
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-deep);
+            color: #e0f7fa;
+            overflow-x: hidden;
+        }
+
+        .title-font {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+        }
+
+        .matrix {
             position: fixed;
             inset: 0;
+            z-index: -20;
+            opacity: 0.14;
+            pointer-events: none;
+        }
+
+        .scan {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(transparent 48%, rgba(0,255,157,0.06) 50%);
+            background-size: 100% 5px;
+            animation: scanline 10s linear infinite;
+            pointer-events: none;
             z-index: -10;
             opacity: 0.18;
-            pointer-events: none;
         }
 
-        .glass {
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(34, 255, 136, 0.18);
-        }
-
-        .neon-glow {
-            text-shadow: 0 0 10px var(--neon-green), 0 0 25px var(--neon-green), 0 0 50px rgba(34,255,136,0.4);
-        }
-
-        .card-hover {
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 25px 50px -12px rgba(34,255,136,0.25);
-            border-color: rgba(34,255,136,0.4) !important;
-        }
-
-        .scanline {
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(transparent 50%, rgba(34,255,136,0.04) 50%);
-            background-size: 100% 6px;
-            pointer-events: none;
-            animation: scan 8s linear infinite;
-            opacity: 0.12;
-            z-index: -5;
-        }
-
-        @keyframes scan {
+        @keyframes scanline {
             0% { transform: translateY(-100%); }
             100% { transform: translateY(100%); }
         }
+
+        .neon-text {
+            text-shadow: 
+                0 0 5px var(--neon),
+                0 0 15px var(--neon),
+                0 0 30px var(--neon-dark),
+                0 0 60px rgba(0,255,157,0.4);
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(0,255,157,0.22);
+            border-radius: 1.5rem;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-14px) scale(1.03);
+            box-shadow: 0 30px 70px -15px rgba(0,255,157,0.35);
+            border-color: rgba(0,255,157,0.55);
+        }
+
+        .float-anim {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pulse-glow {
+            animation: pulse 4s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { text-shadow: 0 0 10px var(--neon); }
+            50% { text-shadow: 0 0 30px var(--neon), 0 0 60px var(--neon-dark); }
+        }
+
+        .project-gradient {
+            background: linear-gradient(135deg, #0f172a, #001a12, #0f172a);
+        }
     </style>
 </head>
-<body class="min-h-screen relative">
+<body class="relative">
 
-    <div class="matrix-canvas" id="matrix"></div>
-    <div class="scanline"></div>
+    <div id="matrix" class="matrix"></div>
+    <div class="scan"></div>
 
     <!-- NAVBAR -->
-    <nav class="fixed top-0 left-0 right-0 z-50 glass border-b border-emerald-900/30">
+    <nav class="fixed top-0 inset-x-0 z-50 glass-card border-b border-emerald-900/30">
         <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-emerald-600/80 flex items-center justify-center text-black font-bold text-2xl title-font neon-glow">S</div>
-                <span class="text-2xl font-bold title-font tracking-tight neon-glow">STIROX</span>
+            <div class="flex items-center gap-4">
+                <img src="https://i.imgur.com/DguYFX1.png" alt="STIROX Logo" class="w-10 h-10 rounded-xl shadow-lg neon-glow">
+                <span class="text-3xl font-black title-font neon-text tracking-wider">STIROX</span>
             </div>
 
-            <div class="hidden md:flex items-center gap-10">
-                <a href="#accueil" class="hover:text-emerald-400 transition">Accueil</a>
-                <a href="#apropos" class="hover:text-emerald-400 transition">À propos</a>
-                <a href="#competences" class="hover:text-emerald-400 transition">Compétences</a>
-                <a href="#projets" class="hover:text-emerald-400 transition">Projets</a>
-                <a href="#contact" class="hover:text-emerald-400 transition">Contact</a>
+            <div class="hidden md:flex gap-10 text-lg font-medium">
+                <a href="#accueil" class="hover:text-[var(--neon)] transition">Accueil</a>
+                <a href="#apropos" class="hover:text-[var(--neon)] transition">À propos</a>
+                <a href="#competences" class="hover:text-[var(--neon)] transition">Stack</a>
+                <a href="#projets" class="hover:text-[var(--neon)] transition">Projets</a>
+                <a href="#contact" class="hover:text-[var(--neon)] transition">Contact</a>
             </div>
 
-            <div class="flex items-center gap-6">
-                <a href="https://discord.com/users/stiroxbereal" target="_blank" class="text-2xl hover:text-emerald-400 transition">
-                    <i class="fab fa-discord"></i>
-                </a>
-                <button class="md:hidden text-3xl" onclick="document.getElementById('mobileMenu').classList.toggle('hidden')">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile menu -->
-        <div id="mobileMenu" class="hidden fixed inset-0 bg-black/95 z-40 pt-24 flex flex-col items-center gap-10 text-3xl">
-            <a href="#accueil" onclick="document.getElementById('mobileMenu').classList.add('hidden')" class="hover:text-emerald-400">Accueil</a>
-            <a href="#apropos" onclick="document.getElementById('mobileMenu').classList.add('hidden')" class="hover:text-emerald-400">À propos</a>
-            <a href="#competences" onclick="document.getElementById('mobileMenu').classList.add('hidden')" class="hover:text-emerald-400">Compétences</a>
-            <a href="#projets" onclick="document.getElementById('mobileMenu').classList.add('hidden')" class="hover:text-emerald-400">Projets</a>
-            <a href="#contact" onclick="document.getElementById('mobileMenu').classList.add('hidden')" class="hover:text-emerald-400">Contact</a>
+            <a href="https://discord.com/users/stiroxbereal" target="_blank" class="text-3xl hover:text-[var(--neon)] transition">
+                <i class="fab fa-discord"></i>
+            </a>
         </div>
     </nav>
 
     <!-- HERO -->
-    <section id="accueil" class="min-h-screen flex items-center pt-24 pb-20 px-6">
-        <div class="max-w-6xl mx-auto text-center">
-            <div class="inline-flex items-center gap-3 px-6 py-2 bg-emerald-950/60 border border-emerald-700/40 rounded-full mb-10">
-                <div class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></div>
-                <span class="text-emerald-300 font-mono text-sm tracking-wider">DISPONIBLE POUR COLLAB ROLEPLAY / PROJETS</span>
+    <section id="accueil" class="min-h-screen flex items-center pt-32 pb-20 px-6">
+        <div class="max-w-6xl mx-auto text-center space-y-10">
+            <div class="inline-flex items-center gap-4 px-8 py-3 glass-card rounded-full">
+                <div class="w-4 h-4 rounded-full bg-[var(--neon)] animate-ping"></div>
+                <span class="font-mono text-[var(--neon)] tracking-widest">CRÉATEUR D'INTERFACES RP • DISPONIBLE</span>
             </div>
 
-            <h1 class="text-6xl md:text-8xl font-bold title-font tracking-tighter neon-glow mb-6">
+            <h1 class="text-7xl md:text-9xl font-black title-font neon-text pulse-glow">
                 STIROX
             </h1>
 
-            <p class="text-3xl md:text-5xl text-emerald-400 font-light mb-8">19 ans • Étudiant Infirmier</p>
-
-            <div class="flex flex-wrap justify-center gap-6 md:gap-10 text-xl md:text-2xl font-mono text-zinc-400 mb-12">
-                <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Python</span><span>Lua</span>
-            </div>
-
-            <p class="max-w-2xl mx-auto text-xl text-zinc-300 leading-relaxed mb-12">
-                Étudiant en soins infirmiers • Ancien technicien informatique<br>
-                Je développe des interfaces web et applications pour le roleplay médical/militaire et plus.
+            <p class="text-4xl md:text-6xl text-[var(--neon)] font-light float-anim">
+                19 ans • Infirmier & Codeur RP
             </p>
 
-            <div class="flex flex-col sm:flex-row gap-6 justify-center">
-                <a href="#projets" class="px-10 py-5 bg-emerald-600 hover:bg-emerald-500 text-black font-bold rounded-2xl text-xl flex items-center justify-center gap-3 transition">
-                    Voir les projets
-                    <i class="fas fa-arrow-right"></i>
+            <div class="flex flex-wrap justify-center gap-8 text-2xl md:text-3xl font-mono text-cyan-200/80">
+                <span>HTML</span> <span>CSS</span> <span>JS</span> <span>Python</span> <span>Lua</span>
+            </div>
+
+            <p class="max-w-3xl mx-auto text-xl md:text-2xl text-cyan-100/90 leading-relaxed">
+                Étudiant infirmier • Ancien technicien informatique<br>
+                Spécialisé dans les interfaces immersives pour roleplay médical, militaire et coulisses RP.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-6 justify-center pt-8">
+                <a href="#projets" class="px-12 py-6 bg-gradient-to-r from-[var(--neon)] to-[var(--neon-dark)] text-black font-bold text-xl rounded-2xl shadow-2xl hover:scale-105 transition transform">
+                    Explorer les projets
                 </a>
-                <a href="#contact" class="px-10 py-5 border-2 border-emerald-500 hover:bg-emerald-950/50 rounded-2xl text-xl transition">
+                <a href="#contact" class="px-12 py-6 border-2 border-[var(--neon)] text-[var(--neon)] font-bold text-xl rounded-2xl hover:bg-[rgba(0,255,157,0.1)] transition">
                     Me contacter
                 </a>
             </div>
@@ -145,159 +177,145 @@
     </section>
 
     <!-- À PROPOS -->
-    <section id="apropos" class="py-24 bg-black/40">
+    <section id="apropos" class="py-32">
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-            <div class="space-y-8">
-                <span class="inline-block px-6 py-2 bg-emerald-950 border border-emerald-700 rounded-full text-emerald-300 font-mono text-sm tracking-widest">
-                    QUI JE SUIS
+            <div class="space-y-10 reveal">
+                <span class="inline-block px-7 py-3 glass-card rounded-full text-[var(--neon)] font-mono tracking-widest">
+                    IDENTITÉ NUMÉRIQUE
                 </span>
 
-                <h2 class="text-5xl md:text-6xl title-font font-bold leading-tight">
-                    Codeur & Étudiant Infirmier
+                <h2 class="text-6xl md:text-7xl title-font font-black neon-text">
+                    STIROX
                 </h2>
 
-                <div class="text-lg text-zinc-300 space-y-6">
-                    <p>Je m'appelle STIROX, j’ai 19 ans.</p>
-                    <p>Je suis actuellement étudiant en soins infirmiers tout en continuant à coder depuis plusieurs années (après une formation de technicien informatique).</p>
-                    <p>Je crée surtout des outils et interfaces pour le <strong>roleplay médical et militaire</strong> (FiveM, GTA RP, Arma, etc.) : sites de formation, dossiers patients, dispatch, robots pharma, tests psy, etc.</p>
-                </div>
-
-                <div class="flex gap-8 pt-6">
-                    <div class="bg-zinc-900/80 border border-emerald-800 rounded-2xl px-8 py-6 text-center">
-                        <div class="text-4xl font-mono text-emerald-400">19</div>
-                        <div class="text-sm text-zinc-400 mt-1">ans</div>
-                    </div>
-                    <div class="bg-zinc-900/80 border border-emerald-800 rounded-2xl px-8 py-6 text-center">
-                        <div class="text-4xl font-mono text-emerald-400">RP</div>
-                        <div class="text-sm text-zinc-400 mt-1">focus</div>
-                    </div>
+                <div class="text-xl text-cyan-100/90 space-y-6">
+                    <p>19 ans, étudiant en soins infirmiers.</p>
+                    <p>Ancienne formation de technicien informatique.</p>
+                    <p>Je crée des systèmes web et applications pour le roleplay : dossiers médicaux, dispatch, formations, robots pharma, coulisses immersives...</p>
                 </div>
             </div>
 
-            <div class="relative rounded-3xl overflow-hidden border border-emerald-800/50">
-                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                     alt="Code ambient" class="w-full h-full object-cover opacity-80">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+            <div class="relative reveal">
+                <div class="absolute inset-0 bg-gradient-radial from-[var(--neon-dark)]/20 to-transparent rounded-3xl"></div>
+                <img src="https://images.unsplash.com/photo-1555066931-bf19c0fd1085?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                     class="rounded-3xl shadow-2xl border border-[var(--neon)]/30 object-cover" alt="Cyber code">
             </div>
         </div>
     </section>
 
     <!-- COMPÉTENCES -->
-    <section id="competences" class="py-24">
+    <section id="competences" class="py-32 bg-black/30">
         <div class="max-w-6xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <span class="font-mono text-emerald-400 tracking-widest">STACK</span>
-                <h2 class="text-5xl md:text-6xl title-font font-bold mt-4">Technologies</h2>
+            <div class="text-center mb-20 reveal">
+                <h2 class="text-6xl md:text-7xl title-font font-black neon-text">Technologies</h2>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
-                <div class="card-hover bg-zinc-900/70 border border-zinc-800 rounded-2xl p-8 text-center">
-                    <i class="fab fa-html5 text-6xl text-orange-500 mb-4"></i>
-                    <h3 class="text-xl font-semibold">HTML5</h3>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+                <div class="glass-card p-10 text-center reveal float-anim">
+                    <i class="fab fa-html5 text-7xl text-orange-500 mb-6"></i>
+                    <h3 class="text-2xl font-bold">HTML5</h3>
                 </div>
-                <div class="card-hover bg-zinc-900/70 border border-zinc-800 rounded-2xl p-8 text-center">
-                    <i class="fab fa-css3-alt text-6xl text-blue-500 mb-4"></i>
-                    <h3 class="text-xl font-semibold">CSS / Tailwind</h3>
+                <div class="glass-card p-10 text-center reveal float-anim" style="animation-delay:0.2s">
+                    <i class="fab fa-css3-alt text-7xl text-blue-500 mb-6"></i>
+                    <h3 class="text-2xl font-bold">CSS / Tailwind</h3>
                 </div>
-                <div class="card-hover bg-zinc-900/70 border border-zinc-800 rounded-2xl p-8 text-center">
-                    <i class="fab fa-js text-6xl text-yellow-400 mb-4"></i>
-                    <h3 class="text-xl font-semibold">JavaScript</h3>
+                <div class="glass-card p-10 text-center reveal float-anim" style="animation-delay:0.4s">
+                    <i class="fab fa-js text-7xl text-yellow-400 mb-6"></i>
+                    <h3 class="text-2xl font-bold">JavaScript</h3>
                 </div>
-                <div class="card-hover bg-zinc-900/70 border border-zinc-800 rounded-2xl p-8 text-center">
-                    <i class="fab fa-python text-6xl text-blue-600 mb-4"></i>
-                    <h3 class="text-xl font-semibold">Python</h3>
+                <div class="glass-card p-10 text-center reveal float-anim" style="animation-delay:0.6s">
+                    <i class="fab fa-python text-7xl text-blue-600 mb-6"></i>
+                    <h3 class="text-2xl font-bold">Python</h3>
                 </div>
-                <div class="card-hover bg-zinc-900/70 border border-zinc-800 rounded-2xl p-8 text-center">
-                    <div class="text-6xl font-bold text-purple-400 mb-4">LUA</div>
-                    <h3 class="text-xl font-semibold">Lua</h3>
+                <div class="glass-card p-10 text-center reveal float-anim" style="animation-delay:0.8s">
+                    <div class="text-7xl font-black text-purple-400 mb-6">LUA</div>
+                    <h3 class="text-2xl font-bold">Lua</h3>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- PROJETS -->
-    <section id="projets" class="py-24 bg-black/40">
-        <div class="max-w-6xl mx-auto px-6">
-            <h2 class="text-5xl md:text-6xl title-font font-bold text-center mb-16">Projets Roleplay</h2>
+    <section id="projets" class="py-32">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-6xl md:text-8xl title-font font-black neon-text text-center mb-24 pulse-glow">
+                Projets RP
+            </h2>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="card-hover bg-zinc-900/70 border border-zinc-800 rounded-3xl overflow-hidden">
-                    <div class="h-48 bg-gradient-to-br from-emerald-950 to-black flex items-center justify-center">
-                        <i class="fas fa-hospital text-7xl text-emerald-600/50"></i>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Projet Coulisses / Manège -->
+                <div class="glass-card overflow-hidden reveal">
+                    <div class="h-64 bg-gradient-to-br from-purple-950 via-indigo-950 to-black flex items-center justify-center relative">
+                        <i class="fas fa-theater-masks text-9xl text-purple-400/40 absolute animate-spin-slow"></i>
+                        <div class="text-center z-10">
+                            <h3 class="text-3xl font-black title-font neon-text">Système de Coulisses</h3>
+                            <p class="text-lg text-purple-300 mt-2">Manège immersif – rotation 360° des décors / persos</p>
+                        </div>
                     </div>
                     <div class="p-8">
-                        <h3 class="text-2xl font-semibold mb-3">Site Web la Défense</h3>
-                        <p class="text-zinc-400">Interface principale pour le roleplay institutionnel / militaire</p>
+                        <p class="text-cyan-100/90">Interface carousel / roue 3D pour backstage RP : voir tous les éléments en rotation fluide comme un manège cyberpunk.</p>
+                        <p class="text-sm text-cyan-300/70 mt-4 italic">Je te fournirai images & vidéos pour l’intégrer plus tard.</p>
                     </div>
                 </div>
 
-                <div class="card-hover bg-zinc-900/70 border border-zinc-800 rounded-3xl overflow-hidden">
-                    <div class="h-48 bg-gradient-to-br from-blue-950 to-black flex items-center justify-center">
-                        <i class="fas fa-user-md text-7xl text-blue-600/50"></i>
+                <!-- Les autres projets (inchangés ou légèrement stylés) -->
+                <div class="glass-card overflow-hidden reveal">
+                    <div class="h-64 bg-gradient-to-br from-emerald-950 to-black flex items-center justify-center">
+                        <i class="fas fa-building-shield text-9xl text-emerald-600/40"></i>
                     </div>
                     <div class="p-8">
-                        <h3 class="text-2xl font-semibold mb-3">Encodage Patient (Web + App)</h3>
-                        <p class="text-zinc-400">Site web + application desktop pour saisie et gestion des patients RP</p>
+                        <h3 class="text-3xl font-bold">Site Web la Défense</h3>
+                        <p class="text-cyan-100/90 mt-3">Portail institutionnel / militaire RP</p>
                     </div>
                 </div>
 
-                <div class="card-hover bg-zinc-900/70 border border-zinc-800 rounded-3xl overflow-hidden">
-                    <div class="h-48 bg-gradient-to-br from-purple-950 to-black flex items-center justify-center">
-                        <i class="fas fa-stethoscope text-7xl text-purple-600/50"></i>
+                <div class="glass-card overflow-hidden reveal">
+                    <div class="h-64 bg-gradient-to-br from-blue-950 to-black flex items-center justify-center">
+                        <i class="fas fa-file-medical text-9xl text-blue-600/40"></i>
                     </div>
                     <div class="p-8">
-                        <h3 class="text-2xl font-semibold mb-3">Formation Infirmier Militaire</h3>
-                        <p class="text-zinc-400">Plateforme de formation immersive pour infirmiers de combat RP</p>
+                        <h3 class="text-3xl font-bold">Encodage Patient Web + App</h3>
+                        <p class="text-cyan-100/90 mt-3">Saisie et gestion patients (web + desktop)</p>
                     </div>
                 </div>
 
-                <div class="card-hover bg-zinc-900/70 border border-zinc-800 rounded-3xl overflow-hidden">
-                    <div class="h-48 bg-gradient-to-br from-red-950 to-black flex items-center justify-center">
-                        <i class="fas fa-robot text-7xl text-red-600/50"></i>
+                <div class="glass-card overflow-hidden reveal">
+                    <div class="h-64 bg-gradient-to-br from-red-950 to-black flex items-center justify-center">
+                        <i class="fas fa-user-nurse text-9xl text-red-600/40"></i>
                     </div>
                     <div class="p-8">
-                        <h3 class="text-2xl font-semibold mb-3">Robot Pharmaceutique</h3>
-                        <p class="text-zinc-400">Interface de gestion automatisée des stocks et délivrance RP</p>
+                        <h3 class="text-3xl font-bold">Formation Infirmier Militaire</h3>
+                        <p class="text-cyan-100/90 mt-3">Plateforme immersive de formation</p>
                     </div>
                 </div>
 
-                <div class="card-hover bg-zinc-900/70 border border-zinc-800 rounded-3xl overflow-hidden">
-                    <div class="h-48 bg-gradient-to-br from-amber-950 to-black flex items-center justify-center">
-                        <i class="fas fa-clipboard-list text-7xl text-amber-600/50"></i>
+                <div class="glass-card overflow-hidden reveal">
+                    <div class="h-64 bg-gradient-to-br from-amber-950 to-black flex items-center justify-center">
+                        <i class="fas fa-robot text-9xl text-amber-600/40"></i>
                     </div>
                     <div class="p-8">
-                        <h3 class="text-2xl font-semibold mb-3">Dispatch & Dossiers Médicaux</h3>
-                        <p class="text-zinc-400">Système de dispatch + gestion centralisée des dossiers patients</p>
+                        <h3 class="text-3xl font-bold">Robot Pharmaceutique</h3>
+                        <p class="text-cyan-100/90 mt-3">Gestion automatisée des stocks et délivrance</p>
                     </div>
                 </div>
 
-                <div class="card-hover bg-zinc-900/70 border border-zinc-800 rounded-3xl overflow-hidden">
-                    <div class="h-48 bg-gradient-to-br from-cyan-950 to-black flex items-center justify-center">
-                        <i class="fas fa-brain text-7xl text-cyan-600/50"></i>
+                <div class="glass-card overflow-hidden reveal">
+                    <div class="h-64 bg-gradient-to-br from-cyan-950 to-black flex items-center justify-center">
+                        <i class="fas fa-head-side-brain text-9xl text-cyan-600/40"></i>
                     </div>
                     <div class="p-8">
-                        <h3 class="text-2xl font-semibold mb-3">Test Psychologique Militaire</h3>
-                        <p class="text-zinc-400">Évaluation psychologique immersive pour recrutement RP</p>
+                        <h3 class="text-3xl font-bold">Test Psychologique Militaire</h3>
+                        <p class="text-cyan-100/90 mt-3">Évaluation immersive recrutement</p>
                     </div>
                 </div>
 
-                <div class="card-hover bg-zinc-900/70 border border-zinc-800 rounded-3xl overflow-hidden">
-                    <div class="h-48 bg-gradient-to-br from-pink-950 to-black flex items-center justify-center">
-                        <i class="fas fa-palette text-7xl text-pink-600/50"></i>
+                <div class="glass-card overflow-hidden reveal lg:col-span-2">
+                    <div class="h-64 bg-gradient-to-br from-pink-950 via-purple-950 to-black flex items-center justify-center">
+                        <i class="fas fa-heartbeat text-9xl text-pink-600/40"></i>
                     </div>
                     <div class="p-8">
-                        <h3 class="text-2xl font-semibold mb-3">Galerie d'Art RP</h3>
-                        <p class="text-zinc-400">Exposition virtuelle d'œuvres pour roleplay culturel</p>
-                    </div>
-                </div>
-
-                <div class="card-hover bg-zinc-900/70 border border-zinc-800 rounded-3xl overflow-hidden col-span-full md:col-span-1 lg:col-span-2">
-                    <div class="h-48 bg-gradient-to-br from-emerald-950 via-cyan-950 to-black flex items-center justify-center">
-                        <i class="fas fa-heartbeat text-8xl text-emerald-600/50"></i>
-                    </div>
-                    <div class="p-8">
-                        <h3 class="text-2xl font-semibold mb-3">Formation ECG + Suture</h3>
-                        <p class="text-zinc-400">Modules interactifs de formation aux ECG et sutures pour infirmiers RP</p>
+                        <h3 class="text-3xl font-bold">Formations ECG + Suture</h3>
+                        <p class="text-cyan-100/90 mt-3">Modules interactifs spécialisés infirmiers RP</p>
                     </div>
                 </div>
             </div>
@@ -305,83 +323,91 @@
     </section>
 
     <!-- CONTACT -->
-    <section id="contact" class="py-24">
+    <section id="contact" class="py-32 bg-black/40">
         <div class="max-w-5xl mx-auto px-6 text-center">
-            <h2 class="text-5xl md:text-6xl title-font font-bold mb-10 neon-glow">Contact</h2>
-            <p class="text-xl text-zinc-300 mb-12 max-w-2xl mx-auto">
-                Tu as un projet roleplay médical/militaire ou une idée d’interface ?<br>
-                Contacte-moi directement sur Discord ou par mail.
-            </p>
+            <h2 class="text-7xl title-font font-black neon-text mb-16 pulse-glow">
+                Contact
+            </h2>
 
-            <div class="grid md:grid-cols-2 gap-10 max-w-4xl mx-auto">
-                <div class="glass rounded-3xl p-10">
-                    <div class="text-5xl mb-6 text-emerald-400">
-                        <i class="fab fa-discord"></i>
-                    </div>
-                    <h3 class="text-2xl font-semibold mb-3">Discord</h3>
-                    <p class="text-xl text-emerald-300 mb-4">@stiroxbereal</p>
-                    <a href="https://discord.gg/KhY2eTbWUV" target="_blank" class="inline-block px-8 py-4 bg-emerald-700/40 hover:bg-emerald-600/60 rounded-2xl transition">
+            <div class="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+                <div class="glass-card p-12 reveal">
+                    <i class="fab fa-discord text-8xl text-[var(--neon)] mb-8"></i>
+                    <h3 class="text-3xl font-bold mb-4">@stiroxbereal</h3>
+                    <a href="https://discord.gg/KhY2eTbWUV" target="_blank" 
+                       class="inline-block mt-6 px-10 py-5 bg-gradient-to-r from-[var(--neon)]/20 to-transparent border border-[var(--neon)]/50 rounded-2xl hover:bg-[var(--neon)]/10 transition">
                         Rejoindre le serveur
                     </a>
                 </div>
 
-                <div class="glass rounded-3xl p-10">
-                    <div class="text-5xl mb-6 text-emerald-400">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <h3 class="text-2xl font-semibold mb-3">Email</h3>
-                    <p class="text-xl break-all text-emerald-300 mb-6">stiroxtwitch@gmail.com</p>
-                    <a href="mailto:stiroxtwitch@gmail.com" class="inline-block px-8 py-4 bg-emerald-700/40 hover:bg-emerald-600/60 rounded-2xl transition">
-                        Envoyer un message
+                <div class="glass-card p-12 reveal">
+                    <i class="fas fa-envelope text-8xl text-[var(--neon)] mb-8"></i>
+                    <h3 class="text-3xl font-bold mb-4 break-all">stiroxtwitch@gmail.com</h3>
+                    <a href="mailto:stiroxtwitch@gmail.com" 
+                       class="inline-block mt-6 px-10 py-5 bg-gradient-to-r from-[var(--neon)]/20 to-transparent border border-[var(--neon)]/50 rounded-2xl hover:bg-[var(--neon)]/10 transition">
+                        Envoyer un mail
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="py-12 text-center text-zinc-500 border-t border-zinc-900">
+    <footer class="py-16 text-center text-cyan-200/50 border-t border-cyan-900/30">
         <p>© 2026 STIROX — Tous droits réservés</p>
     </footer>
 
     <script>
-        // Matrix rain background
-        const canvas = document.getElementById('matrix');
-        const ctx = canvas.getContext('2d');
-
-        function resize() {
-            canvas.height = window.innerHeight;
-            canvas.width = window.innerWidth;
+        // Matrix rain
+        const c = document.getElementById('matrix');
+        const ctx = c.getContext('2d');
+        
+        function resizeMatrix() {
+            c.height = window.innerHeight;
+            c.width = window.innerWidth;
         }
-        resize();
-        window.addEventListener('resize', resize);
+        resizeMatrix();
+        window.addEventListener('resize', resizeMatrix);
 
-        const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*';
-        const fontSize = 16;
-        let columns = canvas.width / fontSize;
-        let drops = Array(Math.floor(columns)).fill(1);
+        const matrix = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}".split("");
+        const font_size = 14;
+        let columns = c.width/font_size;
+        let drops = [];
 
-        function draw() {
-            ctx.fillStyle = 'rgba(10,10,10,0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        for(let x = 0; x < columns; x++) drops[x] = 1; 
 
-            ctx.fillStyle = '#22ff88';
-            ctx.font = fontSize + 'px monospace';
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(10,14,20,0.04)";
+            ctx.fillRect(0,0, c.width, c.height);
 
-            for (let i = 0; i < drops.length; i++) {
-                const text = chars[Math.floor(Math.random() * chars.length)];
-                const x = i * fontSize;
-                const y = drops[i] * fontSize;
+            ctx.fillStyle = "#00ff9d";
+            ctx.font = font_size + "px monospace";
 
-                ctx.fillText(text, x, y);
+            for(let i = 0; i < drops.length; i++) {
+                const text = matrix[Math.floor(Math.random()*matrix.length)];
+                ctx.fillText(text, i*font_size, drops[i]*font_size);
 
-                if (y > canvas.height && Math.random() > 0.975) {
+                if(drops[i]*font_size > c.height && Math.random() > 0.975)
                     drops[i] = 0;
-                }
+
                 drops[i]++;
             }
         }
 
-        setInterval(draw, 40);
+        setInterval(drawMatrix, 50);
+
+        // Scroll reveal
+        const reveals = document.querySelectorAll('.reveal');
+        function checkReveal() {
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const elementTop = el.getBoundingClientRect().top;
+                const elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    el.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', checkReveal);
+        checkReveal(); // initial check
     </script>
 </body>
 </html>
