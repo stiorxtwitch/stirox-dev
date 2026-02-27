@@ -83,7 +83,7 @@
         .carousel-track {
             display: flex;
             gap: 2rem;
-            animation: scroll 60s linear infinite;
+            animation: scroll 80s linear infinite;
             will-change: transform;
         }
         
@@ -265,15 +265,15 @@
         </div>
     </section>
 
-    <!-- CHATBOT BUTTON -->
-    <button onclick="toggleChat()" class="fixed bottom-8 right-8 w-16 h-16 bg-[#5865F2] hover:bg-[#4752C4] rounded-2xl flex items-center justify-center shadow-2xl text-3xl z-50 transition">
-        <i class="fab fa-discord"></i>
+    <!-- BOUTON CHATBOT (nouvelle icône) -->
+    <button onclick="toggleChat()" class="fixed bottom-8 right-8 w-16 h-16 rounded-2xl flex items-center justify-center shadow-2xl z-50 transition hover:scale-110">
+        <img src="https://i.imgur.com/5H1fe1h.png" alt="STIROX IA" class="w-14 h-14 rounded-xl object-cover border-2 border-[var(--neon)]/60 shadow-lg">
     </button>
 
-    <!-- CHATBOT -->
+    <!-- FENÊTRE CHATBOT -->
     <div id="chat-modal" class="hidden fixed bottom-28 right-8 w-96 bg-zinc-950 border border-[var(--neon)]/50 rounded-3xl shadow-2xl overflow-hidden">
         <div class="bg-black/80 p-4 flex items-center gap-3 border-b border-[var(--neon)]/30">
-            <div class="w-10 h-10 bg-emerald-500 rounded-2xl flex items-center justify-center text-xl">🤖</div>
+            <img src="https://i.imgur.com/5H1fe1h.png" alt="STIROX" class="w-10 h-10 rounded-xl">
             <div>
                 <div class="font-bold text-lg">STIROX ASSISTANT</div>
                 <div class="text-xs text-emerald-400">En ligne • IA RP</div>
@@ -298,7 +298,9 @@
     </footer>
 
     <script>
+        // ────────────────────────────────────────────────
         // MATRIX
+        // ────────────────────────────────────────────────
         function initMatrix() {
             const canvas = document.getElementById('matrix');
             const ctx = canvas.getContext('2d');
@@ -330,7 +332,9 @@
             setInterval(draw, 45);
         }
 
+        // ────────────────────────────────────────────────
         // DISCORD STATUS
+        // ────────────────────────────────────────────────
         async function updateDiscordStatus() {
             try {
                 const res = await fetch('https://api.lanyard.rest/v1/users/771440807919878164');
@@ -354,7 +358,9 @@
             }
         }
 
-        // PROJETS CAROUSEL INFINI
+        // ────────────────────────────────────────────────
+        // CAROUSEL INFINI
+        // ────────────────────────────────────────────────
         const projects = [
             { title: "Site Web la Défense", desc: "Portail institutionnel / militaire RP", icon: "fa-building-shield", color: "emerald" },
             { title: "Encodage Patient Web + App", desc: "Formulaire web + application desktop", icon: "fa-file-medical", color: "blue" },
@@ -365,17 +371,18 @@
             { title: "Formation ECG + Suture", desc: "Modules interactifs spécialisés", icon: "fa-heartbeat", color: "red" },
             { title: "Test Psychologique Militaire", desc: "Évaluation immersive recrutement RP", icon: "fa-brain", color: "purple" },
             { title: "Site Web Médical Général", desc: "Hub médical complet pour RP", icon: "fa-hospital", color: "emerald" },
-            { title: "Site de Formation Militaire", desc: "Formation globale pour unités RP", icon: "fa-graduation-cap", color: "yellow" }
+            { title: "Site de Formation Militaire", desc: "Formation globale pour unités RP", icon: "fa-graduation-cap", color: "yellow" },
+            { title: "Système de Coulisses", desc: "Manège 360° immersif – décors & personnages tournent", icon: "fa-theater-masks", color: "purple" }
         ];
 
         function createInfiniteCarousel() {
             const track = document.getElementById('carousel-track');
             track.innerHTML = '';
 
-            // On crée deux copies pour l'effet seamless
-            const allProjects = [...projects, ...projects];
+            // Deux copies pour l'effet seamless
+            const doubled = [...projects, ...projects];
 
-            allProjects.forEach(p => {
+            doubled.forEach(p => {
                 const card = document.createElement('div');
                 card.className = `glass-card p-8 carousel-item cursor-pointer`;
                 card.innerHTML = `
@@ -407,20 +414,66 @@
             document.getElementById('project-modal').classList.add('hidden');
         }
 
-        // CHATBOT (inchangé, mais toujours présent)
-        function getSmartReply(msg) {
-            const lower = msg.toLowerCase();
-            if (lower.includes("bonjour") || lower.includes("salut") || lower.includes("hey")) return "Yo ! Prêt à parler RP ou dev ? 🔥";
-            if (lower.includes("qui es tu") || lower.includes("présente")) return "Je suis STIROX, 19 ans, étudiant infirmier et développeur RP. Je code des interfaces ultra immersives !";
-            if (lower.includes("âge")) return "J’ai 19 ans ! Et toi ?";
-            if (lower.includes("projet") || lower.includes("fait")) return "J’ai fait : la Défense, encodage patient, robot pharma, dispatch, coulisses 360°, formations ECG, test psy… Tu veux que je te détaille un en particulier ?";
-            if (lower.includes("compétence") || lower.includes("langage")) return "HTML, CSS, JavaScript, Python, Lua. Je fais du beau, du fluide et du rapide.";
-            if (lower.includes("discord")) return "Ajoute-moi : @stiroxbereal ou rejoins mon serveur → https://discord.gg/KhY2eTbWUV";
-            if (lower.includes("coulisse") || lower.includes("manège")) return "Le système de coulisses 360° est prêt à être monté ! Envoie-moi tes images/vidéos et je le fais en 3D stylé.";
-            if (lower.includes("contact") || lower.includes("email")) return "Le formulaire juste en dessous ou directement sur Discord, je réponds vite !";
-            
-            const fun = ["Intéressant… raconte-moi plus !", "Tu veux que je te fasse une interface pour ça ? 😏", "J’adore cette idée, on peut en faire un truc de ouf en RP."];
-            return fun[Math.floor(Math.random() * fun.length)];
+        // ────────────────────────────────────────────────
+        // CHATBOT AMÉLIORÉ (sans vraie IA externe, mais plus malin)
+        // ────────────────────────────────────────────────
+        function getSmartReply(userMessage) {
+            const msg = userMessage.toLowerCase().trim();
+            const words = msg.split(/\s+/);
+
+            // Salutations
+            if (/bonjour|salut|hey|yo|cc|coucou/.test(msg)) {
+                return ["Yo ! Content de te voir ! 🔥", "Salut toi ! Prêt à parler code ou RP ?", "Hey ! Ça va ?"][Math.floor(Math.random()*3)];
+            }
+
+            // Présentation
+            if (/(qui|quoi|es-tu|t'es|t es)/.test(msg) && /(toi|es|es tu|t'es)/.test(msg)) {
+                return "Je suis STIROX, 19 ans, étudiant infirmier et développeur RP. Je code des interfaces immersives pour le roleplay médical / militaire / fun. Et toi ?";
+            }
+
+            // Âge
+            if (/(âge|age|quel age|t as quel age)/.test(msg)) {
+                return "J’ai 19 ans ! Et toi, t’as quel âge ?";
+            }
+
+            // Projets
+            if (/(projet|projets|fait|tu fais|tu as fait)/.test(msg)) {
+                if (/(coulisse|coulisses|manège|manège 360|360)/.test(msg)) {
+                    return "Le système de coulisses 360° est en préparation ! Envoie-moi tes images / vidéos et je monte un carousel stylé en 3D.";
+                }
+                return "J’ai codé pas mal de trucs RP : la Défense, encodage patient (web + app), robot pharma, dispatch, dossiers médicaux, formations ECG/suture, test psy militaire… Tu veux que je te parle d’un en particulier ?";
+            }
+
+            // Compétences
+            if (/(compétence|compétences|langage|langages|tu sais|tu codes)/.test(msg)) {
+                return "Je maîtrise HTML, CSS (avec Tailwind), JavaScript, Python et Lua. Je fais du beau, du responsive et du performant. Tu cherches quelque chose en particulier ?";
+            }
+
+            // Discord / contact
+            if (/(discord|serveur|ajoute-moi|contact|email|mail)/.test(msg)) {
+                if (/serveur/.test(msg)) return "Rejoins mon serveur ici : https://discord.gg/KhY2eTbWUV";
+                return "Tu peux m’écrire via le formulaire en bas, ou me ping sur Discord : @stiroxbereal. Je réponds vite !";
+            }
+
+            // Fallback contextuel un peu plus intelligent
+            if (/(merci|thx|thanks|cool|super|genial|bravo)/.test(msg)) {
+                return ["De rien ! 😎", "Avec plaisir !", "Merci à toi !"][Math.floor(Math.random()*3)];
+            }
+
+            if (/(trop|beauf|beau|magnifique|magnifique|j aime|j kiffe)/.test(msg)) {
+                return "Merci ! Content que ça te plaise 🔥";
+            }
+
+            // Réponses aléatoires fun quand on ne comprend pas
+            const fallback = [
+                "Hmm… reformule un peu, je suis pas encore au niveau Grok 😅",
+                "Trop cryptique pour moi là, explique-moi mieux !",
+                "Tu parles de RP, de code, ou d’autre chose ?",
+                "Je sens que tu vas me demander un truc stylé… vas-y balance !",
+                "Envoie plus d’infos, je suis chaud !"
+            ];
+
+            return fallback[Math.floor(Math.random() * fallback.length)];
         }
 
         function sendMessage() {
@@ -436,7 +489,7 @@
                 const reply = getSmartReply(text);
                 messages.innerHTML += `<div class="bg-zinc-900 rounded-3xl p-4 max-w-[80%]">${reply}</div>`;
                 messages.scrollTop = messages.scrollHeight;
-            }, 700);
+            }, 600 + Math.random() * 400); // délai un peu variable pour faire plus naturel
             
             input.value = '';
         }
@@ -460,7 +513,7 @@
             setTimeout(() => {
                 const chat = document.getElementById('chat-messages');
                 if (chat.children.length === 0) {
-                    chat.innerHTML = `<div class="bg-zinc-900 rounded-3xl p-4">Salut ! Je suis STIROX ASSISTANT.<br>Demande-moi tout ce que tu veux sur mes projets, mes compétences ou le RP !</div>`;
+                    chat.innerHTML = `<div class="bg-zinc-900 rounded-3xl p-4">Salut ! Je suis STIROX ASSISTANT.<br>Demande-moi n’importe quoi sur mes projets, mes compétences, le RP, Discord… Je réponds cash ! 🚀</div>`;
                 }
             }, 800);
         });
