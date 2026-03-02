@@ -24,34 +24,19 @@
             overflow-x: hidden;
         }
         
-        .title-font { 
-            font-family: 'Orbitron', sans-serif; 
-            letter-spacing: 2px; 
-        }
+        .title-font { font-family: 'Orbitron', sans-serif; letter-spacing: 2px; }
         
-        .matrix { 
-            position: fixed; 
-            inset: 0; 
-            z-index: -20; 
-            opacity: 0.14; 
-            pointer-events: none; 
-        }
+        .matrix { position: fixed; inset: 0; z-index: -20; opacity: 0.14; pointer-events: none; }
         
         .scan {
-            position: fixed; 
-            inset: 0;
+            position: fixed; inset: 0;
             background: linear-gradient(transparent 48%, rgba(0,255,157,0.06) 50%);
             background-size: 100% 5px;
             animation: scanline 10s linear infinite;
-            pointer-events: none; 
-            z-index: -10; 
-            opacity: 0.18;
+            pointer-events: none; z-index: -10; opacity: 0.18;
         }
         
-        @keyframes scanline { 
-            0% { transform: translateY(-100%); } 
-            100% { transform: translateY(100%); } 
-        }
+        @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
         
         .neon-text {
             text-shadow: 0 0 5px var(--neon), 0 0 15px var(--neon), 0 0 30px var(--neon-dark), 0 0 60px rgba(0,255,157,0.4);
@@ -108,15 +93,31 @@
             from { transform: scale(0.7); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
+
+        /* Vidéo responsive dans modal */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
     </style>
 </head>
 <body class="relative">
 
-
     <canvas id="matrix" class="matrix"></canvas>
     <div class="scan"></div>
 
-
+    <!-- NAVBAR -->
     <nav class="fixed top-0 inset-x-0 z-50 glass-card border-b border-emerald-900/30">
         <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -143,7 +144,7 @@
         </div>
     </nav>
 
-
+    <!-- HERO -->
     <section id="accueil" class="min-h-screen flex items-center pt-32 pb-20 px-6">
         <div class="max-w-6xl mx-auto text-center space-y-10">
             <div class="inline-flex items-center gap-4 px-8 py-3 glass-card rounded-full">
@@ -171,6 +172,7 @@
         </div>
     </section>
 
+    <!-- À PROPOS -->
     <section id="apropos" class="py-32 bg-black/40">
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
             <div class="space-y-10">
@@ -182,13 +184,13 @@
                 </div>
             </div>
             <div class="relative">
-                <img src="https://media1.giphy.com/media/v1.Y2lkPTZjMDliOTUybmpmaGpycnk3ZXFmODZ0OWZjZmh5ZmZ6bHgzdGl5OWh5Ymd4YjhzZyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/QpVUMRUJGokfqXyfa1/giphy.gif" 
+                <img src="https://media1.giphy.com/media/v1.Y2lkPTZjMDliOTUybmpmaGpycnk3ZXFmODZ0OWZjZmh5ZmZ6bHgzdGl5OWh5Ymd4YjhzZyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/QpVUMRUJGokfqXyfa1/giphy.gif"
                      class="rounded-3xl shadow-2xl border border-[var(--neon)]/30 w-full" alt="Cyber">
             </div>
         </div>
     </section>
 
-
+    <!-- COMPÉTENCES -->
     <section id="competences" class="py-32">
         <div class="max-w-6xl mx-auto px-6 text-center">
             <h2 class="text-6xl md:text-7xl title-font font-black neon-text mb-16">Mes technologies</h2>
@@ -202,29 +204,28 @@
         </div>
     </section>
 
+    <!-- CAROUSEL INFINI -->
     <section id="projets" class="py-32 bg-black/40">
         <div class="max-w-7xl mx-auto px-6">
             <h2 class="text-6xl md:text-8xl title-font font-black neon-text text-center mb-16">Mes Projets</h2>
             
             <div class="infinite-carousel">
-                <div class="carousel-track" id="carousel-track">
- 
-                </div>
+                <div class="carousel-track" id="carousel-track"></div>
             </div>
         </div>
     </section>
 
-
+    <!-- MODAL PROJET -->
     <div id="project-modal" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-[100] p-6">
-        <div class="modal glass-card max-w-3xl w-full max-h-[92vh] overflow-auto rounded-3xl">
+        <div class="modal glass-card max-w-4xl w-full max-h-[92vh] overflow-auto rounded-3xl">
             <div class="p-8">
                 <button onclick="closeModal()" class="float-right text-5xl text-gray-400 hover:text-white leading-none">×</button>
-                <div id="modal-content"></div>
+                <div id="modal-content" class="clear-both"></div>
             </div>
         </div>
     </div>
 
-
+    <!-- CONTACT -->
     <section id="contact" class="py-32">
         <div class="max-w-4xl mx-auto px-6">
             <h2 class="text-6xl md:text-7xl title-font font-black neon-text text-center mb-12">Me contacter</h2>
@@ -262,12 +263,12 @@
         </div>
     </section>
 
- 
+    <!-- BOUTON CHATBOT -->
     <button onclick="toggleChat()" class="fixed bottom-8 right-8 w-16 h-16 rounded-2xl flex items-center justify-center shadow-2xl z-50 transition hover:scale-110">
         <img src="https://i.imgur.com/5H1fe1h.png" alt="STIROX IA" class="w-14 h-14 rounded-xl object-cover border-2 border-[var(--neon)]/60 shadow-lg">
     </button>
 
-
+    <!-- FENÊTRE CHATBOT -->
     <div id="chat-modal" class="hidden fixed bottom-28 right-8 w-96 bg-zinc-950 border border-[var(--neon)]/50 rounded-3xl shadow-2xl overflow-hidden">
         <div class="bg-black/80 p-4 flex items-center gap-3 border-b border-[var(--neon)]/30">
             <img src="https://i.imgur.com/5H1fe1h.png" alt="STIROX" class="w-10 h-10 rounded-xl">
@@ -295,7 +296,7 @@
     </footer>
 
     <script>
-
+        // MATRIX
         function initMatrix() {
             const canvas = document.getElementById('matrix');
             const ctx = canvas.getContext('2d');
@@ -327,7 +328,7 @@
             setInterval(draw, 45);
         }
 
-
+        // DISCORD STATUS
         async function updateDiscordStatus() {
             try {
                 const res = await fetch('https://api.lanyard.rest/v1/users/771440807919878164');
@@ -351,19 +352,20 @@
             }
         }
 
-
+        // PROJETS + VIDÉOS
         const projects = [
-            { title: "Site Web la Défense", desc: "Portail institutionnel / militaire RP", icon: "fa-building-shield", color: "emerald" },
-            { title: "Encodage Patient Web + App", desc: "Formulaire web + application desktop", icon: "fa-file-medical", color: "blue" },
-            { title: "Formation Infirmier Militaire", desc: "Plateforme de formation immersive", icon: "fa-user-nurse", color: "red" },
-            { title: "Robot Pharmaceutique", desc: "Gestion automatisée stocks & délivrance", icon: "fa-robot", color: "amber" },
-            { title: "Site de Dispatch", desc: "Dispatch médical RP en temps réel", icon: "fa-clipboard-list", color: "cyan" },
-            { title: "Dossiers Médicaux", desc: "Gestion centralisée des dossiers patients", icon: "fa-folder-medical", color: "pink" },
-            { title: "Formation ECG + Suture", desc: "Modules interactifs spécialisés", icon: "fa-heartbeat", color: "red" },
-            { title: "Test Psychologique Militaire", desc: "Évaluation immersive recrutement RP", icon: "fa-brain", color: "purple" },
-            { title: "Site Web Médical Général", desc: "Hub médical complet pour RP", icon: "fa-hospital", color: "emerald" },
-            { title: "Site de Formation Militaire", desc: "Formation globale pour unités RP", icon: "fa-graduation-cap", color: "yellow" }
-
+            { title: "Site Web la Défense", desc: "Portail institutionnel / militaire RP", icon: "fa-building-shield", color: "emerald", video: "https://drive.google.com/file/d/1XFcdLWYHbZkOpKbdLXe33H8peG_mYF7C/preview" },
+            { title: "Encodage Patient Web + App", desc: "Formulaire web + application desktop", icon: "fa-file-medical", color: "blue", video: "https://drive.google.com/file/d/1jyCjQZzjYlbEAQZE2Oz_wNb39o1jp85P/preview" },
+            { title: "Formation Infirmier Militaire", desc: "Plateforme de formation immersive", icon: "fa-user-nurse", color: "red", video: "https://drive.google.com/file/d/1Iv5OhjNltF2uT4ROQwN7759In8pRU1no/preview" },
+            { title: "GENESI Medecine (Robot Pharmaceutique)", desc: "Gestion automatisée stocks & délivrance", icon: "fa-robot", color: "amber", video: "https://drive.google.com/file/d/1uxupDYb3RIhnA3BlZf1FbZxfEVQDZK2p/preview" },
+            { title: "Site de Dispatch (Ambulance)", desc: "Dispatch médical RP en temps réel", icon: "fa-clipboard-list", color: "cyan", video: "https://drive.google.com/file/d/16fyUxq-zrMJ4X7W0k6Wx9Yiv0dB08V9j/preview" },
+            { title: "Dossiers Médicaux", desc: "Gestion centralisée des dossiers patients", icon: "fa-folder-medical", color: "pink", video: "https://drive.google.com/file/d/15CGqqJC__24WKGbi_-MGofVgVyDdCCl1/preview" },
+            { title: "Formation ECG", desc: "Module interactif ECG", icon: "fa-heartbeat", color: "red", video: "https://drive.google.com/file/d/1PFl2izHlk99nbSywrRXSWIl43mnV5WTs/preview" },
+            { title: "Formation Suture", desc: "Module interactif suture", icon: "fa-heartbeat", color: "red", video: "https://drive.google.com/file/d/1kabvHaSxZToxKXjRUhrfb-cBi7KWBAgx/preview" },
+            { title: "Test Psychologique Militaire", desc: "Évaluation immersive recrutement RP", icon: "fa-brain", color: "purple", video: "https://drive.google.com/file/d/1Bn1_ESL95T1FWQo4ho8NMSPM7XHU2ry0/preview" },
+            { title: "Atelier Rhiannon", desc: "Projet Atelier Rhiannon", icon: "fa-palette", color: "purple", video: "https://drive.google.com/file/d/149L07j63r8uu_a5wNX6a5_Z5yHhrw1PW/preview" },
+            { title: "Sams Site web", desc: "Site web Sams", icon: "fa-hospital", color: "emerald", video: "https://drive.google.com/file/d/1s8dnVht2f4bVvDsaI3Zkb1aIhS8UvdG6/preview" },
+            { title: "Système de Coulisses", desc: "Manège 360° immersif – décors & personnages tournent", icon: "fa-theater-masks", color: "purple", video: null }
         ];
 
         function createInfiniteCarousel() {
@@ -389,13 +391,21 @@
 
         function showProjectModal(index) {
             const p = projects[index];
+            let videoHtml = '<p class="text-2xl text-center text-cyan-300">Aucune vidéo disponible pour ce projet</p>';
+            
+            if (p.video) {
+                videoHtml = `
+                    <div class="video-container mt-8">
+                        <iframe src="${p.video}" allowfullscreen></iframe>
+                    </div>
+                `;
+            }
+
             document.getElementById('modal-content').innerHTML = `
                 <h2 class="text-4xl font-black title-font neon-text">${p.title}</h2>
                 <p class="text-xl text-cyan-200/80 mt-6">${p.desc}</p>
-                <div class="mt-10 bg-black/60 h-96 rounded-3xl flex items-center justify-center border border-[var(--neon)]/30">
-                    <p class="text-2xl text-center text-cyan-300">Capture d'écran / Vidéo à venir ici<br><span class="text-sm block mt-2">Envoie-moi tes images !</span></p>
-                </div>
-                <button onclick="closeModal()" class="mt-8 w-full py-5 border border-[var(--neon)] text-[var(--neon)] rounded-2xl hover:bg-[var(--neon)] hover:text-black transition">Fermer</button>
+                ${videoHtml}
+                <button onclick="closeModal()" class="mt-10 w-full py-5 border border-[var(--neon)] text-[var(--neon)] rounded-2xl hover:bg-[var(--neon)] hover:text-black transition">Fermer</button>
             `;
             document.getElementById('project-modal').classList.remove('hidden');
         }
@@ -404,54 +414,34 @@
             document.getElementById('project-modal').classList.add('hidden');
         }
 
+        // CHATBOT (version actuelle conservée)
         function getSmartReply(userMessage) {
             const msg = userMessage.toLowerCase().trim();
             const words = msg.split(/\s+/);
 
-            // Salutations
             if (/bonjour|salut|hey|yo|cc|coucou/.test(msg)) {
                 return ["Yo ! Content de te voir ! 🔥", "Salut toi ! Prêt à parler code ou RP ?", "Hey ! Ça va ?"][Math.floor(Math.random()*3)];
             }
-
-            // Présentation
             if (/(qui|quoi|es-tu|t'es|t es)/.test(msg) && /(toi|es|es tu|t'es)/.test(msg)) {
                 return "Je suis STIROX, 19 ans, étudiant infirmier et développeur RP. Je code des interfaces immersives pour le roleplay médical / militaire / fun. Et toi ?";
             }
-
-            // Âge
             if (/(âge|age|quel age|t as quel age)/.test(msg)) {
                 return "J’ai 19 ans ! Et toi, t’as quel âge ?";
             }
-
-            // Projets
             if (/(projet|projets|fait|tu fais|tu as fait)/.test(msg)) {
                 if (/(coulisse|coulisses|manège|manège 360|360)/.test(msg)) {
                     return "Le système de coulisses 360° est en préparation ! Envoie-moi tes images / vidéos et je monte un carousel stylé en 3D.";
                 }
                 return "J’ai codé pas mal de trucs RP : la Défense, encodage patient (web + app), robot pharma, dispatch, dossiers médicaux, formations ECG/suture, test psy militaire… Tu veux que je te parle d’un en particulier ?";
             }
-
-            // Compétences
             if (/(compétence|compétences|langage|langages|tu sais|tu codes)/.test(msg)) {
                 return "Je maîtrise HTML, CSS (avec Tailwind), JavaScript, Python et Lua. Je fais du beau, du responsive et du performant. Tu cherches quelque chose en particulier ?";
             }
-
-            // Discord / contact
             if (/(discord|serveur|ajoute-moi|contact|email|mail)/.test(msg)) {
                 if (/serveur/.test(msg)) return "Rejoins mon serveur ici : https://discord.gg/KhY2eTbWUV";
                 return "Tu peux m’écrire via le formulaire en bas, ou me ping sur Discord : @stiroxbereal. Je réponds vite !";
             }
 
-            // Fallback contextuel un peu plus intelligent
-            if (/(merci|thx|thanks|cool|super|genial|bravo)/.test(msg)) {
-                return ["De rien ! 😎", "Avec plaisir !", "Merci à toi !"][Math.floor(Math.random()*3)];
-            }
-
-            if (/(trop|beauf|beau|magnifique|magnifique|j aime|j kiffe)/.test(msg)) {
-                return "Merci ! Content que ça te plaise 🔥";
-            }
-
-            // Réponses aléatoires fun quand on ne comprend pas
             const fallback = [
                 "Hmm… reformule un peu, je suis pas encore au niveau Grok 😅",
                 "Trop cryptique pour moi là, explique-moi mieux !",
@@ -476,7 +466,7 @@
                 const reply = getSmartReply(text);
                 messages.innerHTML += `<div class="bg-zinc-900 rounded-3xl p-4 max-w-[80%]">${reply}</div>`;
                 messages.scrollTop = messages.scrollHeight;
-            }, 600 + Math.random() * 400); 
+            }, 600 + Math.random() * 400);
             
             input.value = '';
         }
@@ -489,14 +479,13 @@
             }
         }
 
-
+        // INIT
         window.addEventListener('load', () => {
             initMatrix();
             createInfiniteCarousel();
             updateDiscordStatus();
             setInterval(updateDiscordStatus, 60000);
             
-            // Message de bienvenue chatbot
             setTimeout(() => {
                 const chat = document.getElementById('chat-messages');
                 if (chat.children.length === 0) {
